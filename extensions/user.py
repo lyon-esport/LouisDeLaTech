@@ -104,7 +104,7 @@ class UserCog(commands.Cog):
         self.bot = bot
 
     @commands.command()
-    @is_gsuite_admin
+    @commands.guild_only()
     async def test(self, ctx):
         await ctx.send("test")
 
