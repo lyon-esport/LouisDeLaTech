@@ -1,0 +1,53 @@
+sentry_dsn = ""
+
+[teams]
+    [teams.marketing]
+        discord = "Equipe Marketing"
+        google = ""
+        message_template = "marketing.j2"
+    [teams.tournoi]
+        discord = "Equipe Tournoi"
+        google = ""
+        message_template = "tournoi.j2"
+    [teams.technique]
+        discord = "Equipe Technique"
+        google = ""
+        message_template = "technique.j2"
+    [teams."scène"]
+        discord = "Equipe Scène"
+        google = ""
+        message_template = "scene.j2"
+    [teams.logistique]
+        discord = "Equipe Logistique"
+        google = ""
+        message_template = "logistique.j2"
+[discord]
+    token = ""
+    initial_cogs = [
+        "extensions.task",
+        "extensions.management",
+        "extensions.user",
+    ]
+    command_prefix = "!"
+    bot_activity = [
+        "En train de parler sur le stream de jiji",
+        "En train de regarder Nami sur la scène",
+    ]
+    [discord.roles]
+        default = [
+            "Membres de l'association",
+            "_Marketing",
+            "_Tournoi",
+            "_Technique",
+            "_Spectacle & streaming",
+            "_Logistique",
+        ]
+
+[google]
+subject = ""
+scopes = [
+    "https://www.googleapis.com/auth/admin.directory.user",
+    "https://www.googleapis.com/auth/admin.directory.group",
+    "https://www.googleapis.com/auth/gmail.settings.basic",
+    "https://www.googleapis.com/auth/gmail.settings.sharing",
+]
