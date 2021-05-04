@@ -15,9 +15,4 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
-          script: |
-            sudo su louisdelatech
-            cd /opt/LouisDeLaTech
-            git pull
-            exit
-            sudo systemctl restart louisdelatech
+          script: ./louisdelatech_deploy.sh
