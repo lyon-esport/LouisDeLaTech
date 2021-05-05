@@ -1,0 +1,2 @@
+class LouisDeLaTechError(Exception):
+    pass
