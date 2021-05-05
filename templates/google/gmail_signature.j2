@@ -1,29 +1,29 @@
-<div id="sig-container"> 
+<div id="sig-container">
 	<table cellpadding="0" cellspacing="0">
 		<tr>
-			<div style="float: left; margin: 2px 5px 5px 0px; display: block;" id="photoWrapper"> 
+			<div style="float: left; margin: 2px 5px 5px 0px; display: block;" id="photoWrapper">
 				<td>
 					<span><a href="https://www.lyon-esport.fr/"><img src="https://lyon-esport.fr/media/users/bloc_marque-04-06_(3).png" id="sigPhoto" width="124px" height="111px" alt="Logo et site Lyon e-Sport"></a></span>
 				</td>
-			</div> 
+			</div>
 			<td color="#F2547D" direction="vertical" class="sc-jhAzac hmXDXQ" style="width: 10px; margin-right: 5px; margin-left: 5px; border-bottom: none; border-left: 1px solid rgb(42, 42, 46);" width="1"></td>
-			<div style="margin-top:0px; margin-left: 74px;" id="sigDetailsWrapper"> 
+			<div style="margin-top:0px; margin-left: 74px;" id="sigDetailsWrapper">
 				<td width="342px">
 					<table width="370" cellspacing="3" cellpadding="3" border="0">
 						<tr width="342px" height="25">
-							<p style="font-family: Helvetica, sans-serif; font-size: 12px; line-height: 14px; color:#333; margin-top: 0px;" id="sigCompanyWrapper"> 
+							<p style="font-family: Helvetica, sans-serif; font-size: 12px; line-height: 14px; color:#333; margin-top: 0px;" id="sigCompanyWrapper">
 								<strong><span id="sigCompany" style="color:rgb(255, 0, 0);">Association Lyon e-Sport</span></strong><br>
 								<strong><span id="sigName">{{ firstname|title }} {{ lastname|upper }}</span></strong>
-								{% if role is not none %}<br><span id="sigTitle">Equipe {{ role|title }}</span>
-								{% if team is not none %}<br><span id="sigTeam">{{ team }}</span><br>
-							</p> 
+								{% if role is not none %}<br><span id="sigTitle">Equipe {{ role|title }}</span>{% endif %}
+								{% if team is not none %}<br><span id="sigTeam">{{ team }}</span><br>{% endif %}
+							</p>
 						</tr>
 						<tr width="342px" height="25px">
-							<span id="twitterIcon"><a href="https://twitter.com/LyoneSport"><img src="https://s3.amazonaws.com/rkjha/signature-maker/icons/twitter_circle_color-20.png" width="20px" height="20px" alt="Twitter Lyon e-Sport"></a></span> 
-							<span id="facebookIcon"><a href="https://fr-fr.facebook.com/LyoneSport/"><img src="https://s3.amazonaws.com/rkjha/signature-maker/icons/facebook_circle_color-20.png" width="20px" height="20px" alt="Facebook Lyon e-Sport"></a></span> 
-							<span id="instagramIcon"><a href="https://www.instagram.com/lyonesport/"><img src="https://s3.amazonaws.com/rkjha/signature-maker/icons/instagram_circle_color-20.png" width="20px" height="20px" alt="Instagram Lyon e-Sport"></a></span> 
-							<span id="youtubeIcon"><a href="https://www.youtube.com/c/lyonesports/"><img src="https://s3.amazonaws.com/rkjha/signature-maker/icons/youtube_circle_color-20.png" width="20px" height="20px" alt="YouTube Lyon e-Sport"></a></span> 
-							<span id="githubIcon"><a href="https://github.com/lyon-esport/"><img src="https://s3.amazonaws.com/rkjha/signature-maker/icons/github_circle_black-20.png" width="20px" height="20px" alt="GitHub Lyon e-Sport"></a></span> 
+							<span id="twitterIcon"><a href="https://twitter.com/LyoneSport"><img src="https://s3.amazonaws.com/rkjha/signature-maker/icons/twitter_circle_color-20.png" width="20px" height="20px" alt="Twitter Lyon e-Sport"></a></span>
+							<span id="facebookIcon"><a href="https://fr-fr.facebook.com/LyoneSport/"><img src="https://s3.amazonaws.com/rkjha/signature-maker/icons/facebook_circle_color-20.png" width="20px" height="20px" alt="Facebook Lyon e-Sport"></a></span>
+							<span id="instagramIcon"><a href="https://www.instagram.com/lyonesport/"><img src="https://s3.amazonaws.com/rkjha/signature-maker/icons/instagram_circle_color-20.png" width="20px" height="20px" alt="Instagram Lyon e-Sport"></a></span>
+							<span id="youtubeIcon"><a href="https://www.youtube.com/c/lyonesports/"><img src="https://s3.amazonaws.com/rkjha/signature-maker/icons/youtube_circle_color-20.png" width="20px" height="20px" alt="YouTube Lyon e-Sport"></a></span>
+							<span id="githubIcon"><a href="https://github.com/lyon-esport/"><img src="https://s3.amazonaws.com/rkjha/signature-maker/icons/github_circle_black-20.png" width="20px" height="20px" alt="GitHub Lyon e-Sport"></a></span>
 							<span id="websiteIcon"><a href="https://www.lyon-esport.fr/"><img src="https://www.lyon-esport.fr/static/favicons/favicon-16x16.png" width="20px" height="20px" alt="Site Lyon e-Sport"></a></span>
 						</tr>
 					</table>
@@ -31,4 +31,4 @@
 			</div>
 		</tr>
 	</table>
-</div> 
+</div>
