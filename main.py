@@ -43,6 +43,7 @@ if len(config["sentry_dsn"]) > 0:
     )
 
 bot = LouisDeLaTech(config, args.google)
+bot.loop.run_until_complete(bot.init_tortoise())
 
 for extension in config["discord"]["initial_cogs"]:
     bot.load_extension(extension)

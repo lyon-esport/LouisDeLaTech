@@ -6,18 +6,19 @@ from discord.utils import get
 from googleapiclient.errors import HttpError
 from jinja2 import Template
 
+from utils.LouisDeLaTechError import LouisDeLaTechError
+from utils.User import User
 from utils.gsuite import (
+    search_user,
+    get_users,
     add_user,
-    update_user_names,
+    update_user_pseudo,
+    update_user_department,
     suspend_user,
     add_user_group,
     delete_user_group,
     update_user_signature,
     is_gsuite_admin,
-)
-from utils.format import (
-    format_discord_name,
-    format_gsuite_email,
     format_google_api_error,
 )
 from utils.password import generate_password
@@ -40,10 +41,14 @@ class UserCog(commands.Cog):
         [Google]
             => User will be created and added to team group
         """
-        user_email = format_gsuite_email(firstname, lastname)
+        user_email = User.email_from_name(firstname, lastname)
         user_team = self.bot.config["teams"].get(new_role_name, None)
         password = generate_password()
         admin_sdk = self.bot.admin_sdk()
+
+        if user_team is None:
+            await ctx.send(f"Role {new_role_name} does not exist, check bot config")
+            return
 
         try:
             add_user(
@@ -57,14 +62,17 @@ class UserCog(commands.Cog):
                 pseudo,
             )
             add_user_group(admin_sdk, user_email, user_team["google"])
-            update_user_signature(self.bot.gmail_sdk(user_email), user_email)
+            update_user_signature(
+                self.bot.gmail_sdk(user_email),
+                user_email,
+                firstname,
+                lastname,
+                None,
+                new_role_name,
+            )
         except HttpError as e:
             await ctx.send(format_google_api_error(e))
             raise
-
-        if user_team is None:
-            await ctx.send(f"Role {new_role_name} does not exist, check bot config")
-            return
 
         for role_name in self.bot.config["discord"]["roles"]["default"]:
             role = get(member.guild.roles, name=role_name)
@@ -84,7 +92,7 @@ class UserCog(commands.Cog):
             )
             return
 
-        await member.edit(nick=format_discord_name(firstname, lastname, pseudo))
+        await member.edit(nick=User.discord_name(firstname, pseudo, lastname))
 
         await ctx.send(f"User {member.name} provisionned")
 
@@ -98,29 +106,33 @@ class UserCog(commands.Cog):
                 f"./templates/discord/{user_team['message_template']}", encoding="utf-8"
             ).read()
         )
-        await member.send(template.render())
+        team_message = template.render()
+        if team_message:
+            await member.send(team_message)
 
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command()
-    @commands.guild_only()
-    async def test(self, ctx):
-        await ctx.send("test")
-
     @commands.command(help="Deprovision an user")
     @commands.guild_only()
     @is_gsuite_admin
-    async def deprovision(self, ctx, member: discord.Member, firstname, lastname):
+    async def deprovision(self, ctx, member: discord.Member):
         """
         [Discord]
             => User will be removed from all groups
         [Google]
             => User will be suspended
         """
-        user_email = format_gsuite_email(firstname, lastname)
         try:
-            suspend_user(self.bot.admin_sdk(), user_email, ctx.author)
+            user = search_user(self.bot.admin_sdk(), member.name, member.id)
+        except LouisDeLaTechError as e:
+            await ctx.send(f"{member} => {e.args[0]}")
+            return
+        except HttpError as e:
+            await ctx.send(format_google_api_error(e))
+            raise
+        try:
+            suspend_user(self.bot.admin_sdk(), user.email, ctx.author)
         except HttpError as e:
             await ctx.send(format_google_api_error(e))
             raise
@@ -132,9 +144,7 @@ class UserCog(commands.Cog):
     @commands.command(name="uteam", help="Update user team")
     @commands.guild_only()
     @is_gsuite_admin
-    async def update_team(
-        self, ctx, member: discord.Member, firstname, lastname, new_role_name
-    ):
+    async def update_team(self, ctx, member: discord.Member, new_team_name):
         """
         [Discord]
             => User will be removed from all team groups
@@ -142,24 +152,44 @@ class UserCog(commands.Cog):
         [Google]
             => User will be removed from all team groups
             => User will be added to this new team
+            => User signature will be updated
         """
-        user_team = self.bot.config["teams"].get(new_role_name, None)
+        try:
+            user = search_user(self.bot.admin_sdk(), member.name, member.id)
+            user.team = new_team_name
+        except LouisDeLaTechError as e:
+            await ctx.send(f"{member} => {e.args[0]}")
+            return
+        except HttpError as e:
+            await ctx.send(format_google_api_error(e))
+            raise
+
+        new_user_team = self.bot.config["teams"].get(user.team, None)
         admin_sdk = self.bot.admin_sdk()
+
+        if new_user_team is None:
+            await ctx.send(f"Role {user.team} does not exist, check bot config")
+            return
 
         try:
             for v in self.bot.config["teams"].values():
-                delete_user_group(
-                    admin_sdk, format_gsuite_email(firstname, lastname), v["google"]
-                )
-            add_user_group(
-                admin_sdk, format_gsuite_email(firstname, lastname), user_team["google"]
+                delete_user_group(admin_sdk, user.email, v["google"])
+            add_user_group(admin_sdk, user.email, new_user_team["google"])
+            update_user_department(admin_sdk, user.email, user.team)
+            update_user_signature(
+                self.bot.gmail_sdk(user.email),
+                user.email,
+                user.firstname,
+                user.lastname,
+                user.role,
+                user.team,
             )
         except HttpError as e:
             await ctx.send(format_google_api_error(e))
             raise
 
-        if user_team is None:
-            await ctx.send(f"Role {new_role_name} does not exist, check bot config")
+        if new_user_team is None:
+            await ctx.send(f"Role {user.team} does not exist, check bot config")
             return
 
         for v in self.bot.config["teams"].values():
@@ -171,34 +201,40 @@ class UserCog(commands.Cog):
                     f"Discord role {v['discord']} does not exist, check bot config"
                 )
                 return
-        role = get(member.guild.roles, name=user_team["discord"])
+        role = get(member.guild.roles, name=new_user_team["discord"])
         if role:
             await member.add_roles(role)
         else:
-            await ctx.send(f"Discord role {new_role_name} does not exist")
+            await ctx.send(f"Discord role {user.team} does not exist")
             return
 
-        await ctx.send(f"User {member.name} is now member of {new_role_name}")
+        await ctx.send(f"User {member.name} is now member of {user.team}")
 
     @commands.command(name="upseudo", help="Update user pseudo")
     @commands.guild_only()
     @is_gsuite_admin
-    async def update_pseudo(
-        self, ctx, member: discord.Member, firstname, lastname, new_pseudo
-    ):
+    async def update_pseudo(self, ctx, member: discord.Member, new_pseudo):
         """
         [Discord]
             => User will be renamed
         [Google]
-            => User will be renamed
+            => User pseudo will be renamed
         """
         try:
-            update_user_names(
+            user = search_user(self.bot.admin_sdk(), member.name, member.id)
+            user.pseudo = new_pseudo
+        except LouisDeLaTechError as e:
+            await ctx.send(f"{member} => {e.args[0]}")
+            return
+        except HttpError as e:
+            await ctx.send(format_google_api_error(e))
+            raise
+
+        try:
+            update_user_pseudo(
                 self.bot.admin_sdk(),
-                firstname,
-                lastname,
-                new_pseudo,
-                format_gsuite_email(firstname, lastname),
+                user.email,
+                user.pseudo,
             )
         except HttpError as e:
             await ctx.send(format_google_api_error(e))
@@ -206,9 +242,43 @@ class UserCog(commands.Cog):
 
         old_nick = member.nick
 
-        await member.edit(nick=format_discord_name(firstname, lastname, new_pseudo))
+        await member.edit(
+            nick=User.discord_name(user.firstname, user.pseudo, user.lastname)
+        )
 
         await ctx.send(f"User {old_nick} is now {member.nick}")
+
+    @commands.command(
+        name="usignatures", help="Update the signature of all users on gmail"
+    )
+    @commands.guild_only()
+    @is_gsuite_admin
+    async def update_signatures(self, ctx):
+        try:
+            users = get_users(self.bot.admin_sdk())
+        except HttpError as e:
+            await ctx.send(format_google_api_error(e))
+            raise
+
+        for user in users:
+            try:
+                user = User(user)
+                update_user_signature(
+                    self.bot.gmail_sdk(user.email),
+                    user.email,
+                    user.firstname,
+                    user.lastname,
+                    user.role,
+                    user.team,
+                )
+            except LouisDeLaTechError as e:
+                await ctx.send(f"{user.email} => {e.args[0]}")
+                return
+            except HttpError as e:
+                await ctx.send(format_google_api_error(e))
+                return
+
+        await ctx.send(f"Update all signatures")
 
 
 def setup(bot):
