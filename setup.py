@@ -26,7 +26,7 @@ setup(
         "google-auth-httplib2==0.1.0",
         "pyotp==2.6.0",
         "tortoise-orm==0.17.2",
-        "aiosqlite==0.17.0",
+        "aiosqlite==0.16.1",
         "cryptography==3.4.7",
     ],
     extras_require={
