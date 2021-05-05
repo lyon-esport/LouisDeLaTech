@@ -51,3 +51,7 @@ scopes = [
     "https://www.googleapis.com/auth/gmail.settings.basic",
     "https://www.googleapis.com/auth/gmail.settings.sharing",
 ]
+
+[db]
+filename = "db.sqlite3"
+secret_key = ""

@@ -30,6 +30,12 @@ Create a [discord bot](https://discord.com/developers/applications) and get the 
 
 ## Configure
 
+Genereate secret_key to encrypt database secrets
+
+    $ python3
+    $ from cryptography.fernet import Fernet
+    $ Fernet.generate_key()
+
 Fill `config.toml` with `config.example`
 
 ## Run
