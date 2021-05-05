@@ -13,6 +13,7 @@ from utils.gsuite import (
     get_users,
     add_user,
     update_user_pseudo,
+    update_user_department,
     suspend_user,
     add_user_group,
     delete_user_group,
@@ -163,17 +164,18 @@ class UserCog(commands.Cog):
             await ctx.send(format_google_api_error(e))
             raise
 
-        new_user_team = self.bot.config["teams"].get(user.role, None)
+        new_user_team = self.bot.config["teams"].get(user.team, None)
         admin_sdk = self.bot.admin_sdk()
 
         if new_user_team is None:
-            await ctx.send(f"Role {user.role} does not exist, check bot config")
+            await ctx.send(f"Role {user.team} does not exist, check bot config")
             return
 
         try:
             for v in self.bot.config["teams"].values():
                 delete_user_group(admin_sdk, user.email, v["google"])
             add_user_group(admin_sdk, user.email, new_user_team["google"])
+            update_user_department(admin_sdk, user.email, user.team)
             update_user_signature(
                 self.bot.gmail_sdk(user.email),
                 user.email,

@@ -59,6 +59,9 @@ def search_user(admin_sdk, discord_pseudo, discord_id):
         )
     )
     users = users["users"] if "users" in users else None
+    # API sometimes don't send back custom.discord_id
+    if "discord_id" not in users[0]["customSchemas"]["custom"]:
+        users[0]["customSchemas"]["custom"]["discord_id"] = discord_id
     if len(users) == 0:
         raise LouisDeLaTechError(
             f"No Gsuite account found with discord_id: {discord_id} for user {discord_pseudo}"
@@ -137,6 +140,13 @@ def update_user_signature(gmail_sdk, user_email, firstname, lastname, role, team
 
 def suspend_user(admin_sdk, user_email, author):
     body = {"suspended": True, "suspensionReason": f"Account deprovisioned by {author}"}
+    make_request(admin_sdk.users().update(userKey=user_email, body=body))
+
+
+def update_user_department(admin_sdk, user_email, department):
+    body = {
+        "organizations": [{"primary": True, "customType": "", "department": department}]
+    }
     make_request(admin_sdk.users().update(userKey=user_email, body=body))
 
 
