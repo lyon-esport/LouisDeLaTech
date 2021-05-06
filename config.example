@@ -26,6 +26,7 @@ sentry_dsn = ""
     initial_cogs = [
         "extensions.task",
         "extensions.management",
+        "extensions.otp",
         "extensions.user",
     ]
     command_prefix = "!"
