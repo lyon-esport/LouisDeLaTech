@@ -272,13 +272,13 @@ class UserCog(commands.Cog):
                     user.team,
                 )
             except LouisDeLaTechError as e:
-                await ctx.send(f"{user.email} => {e.args[0]}")
-                return
+                await ctx.send(f"{user['primaryEmail']} => {e.args[0]}")
+                continue
             except HttpError as e:
                 await ctx.send(format_google_api_error(e))
                 return
 
-        await ctx.send(f"Update all signatures")
+        await ctx.send(f"Update signatures for {len(users)} users")
 
 
 def setup(bot):
