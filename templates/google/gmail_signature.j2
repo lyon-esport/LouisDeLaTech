@@ -6,15 +6,15 @@
 					<span><a href="https://www.lyon-esport.fr/"><img src="https://admin.lyon-esport.fr/media/uploads/images/logo_les.png" id="sigPhoto" width="124px" height="111px" alt="Logo et site Lyon e-Sport"></a></span>&nbsp;
 				</td>
 			</div>
-			<td color="#F2547D" direction="vertical" class="sc-jhAzac hmXDXQ" style="width: 5px; margin-right: 5px; margin-left: 5px; border-bottom: none; border-left: 1px solid rgb(42, 42, 46);" width="1"></td>
+			<td color="#F2547D" direction="vertical" class="sc-jhAzac hmXDXQ" style="width: 2px; margin-right: 5px; margin-left: 5px; border-bottom: none; border-left: 1px solid rgb(42, 42, 46);" width="1"></td>
 			<div style="margin-top:0px; margin-left: 5px;" id="sigDetailsWrapper">
 				<td width="342px">
 					<table width="370" cellspacing="3" cellpadding="3" border="0">
-						<tr width="342px" height="25">
+						<tr width="342px" height="25px">
 							<p style="font-family: Helvetica, sans-serif; font-size: 12px; line-height: 14px; color:#333; margin-top: 0px;" id="sigCompanyWrapper">
 								<strong><span id="sigName" style="color:rgb(255, 0, 0);">{{ firstname|title }} {{ lastname|upper }}</span></strong>
-								{% if role is not none %}<br><span id="sigTitle">{{ role|title }}</span><br>{% endif %}
-								{% if team is not none %}<br><span id="sigTeam">Equipe {{ team }}</span><br>{% endif %}
+								{% if role is not none %}<br><span id="sigTitle">{{ role|title }}</span>{% endif %}
+								{% if team is not none %}<br><span id="sigTeam">Equipe {{ team }}</span>{% endif %}
 								<br><strong><span id="sigCompany">Association Lyon e-Sport</span></strong>
 							</p>
 						</tr>
