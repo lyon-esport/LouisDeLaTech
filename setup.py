@@ -20,7 +20,7 @@ setup(
     install_requires=[
         "discord.py==1.7.2",
         "toml==0.10.2",
-        "Jinja2==2.11.3",
+        "Jinja2==3.0.1",
         "discord.py==1.7.2",
         "google-api-python-client==2.6.0",
         "google-auth-httplib2==0.1.0",
