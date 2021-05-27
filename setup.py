@@ -18,10 +18,10 @@ setup(
     zip_safe=False,
     python_requires=">=3.8,<3.10",
     install_requires=[
-        "discord.py==1.7.1",
+        "discord.py==1.7.2",
         "toml==0.10.2",
         "Jinja2==2.11.3",
-        "discord.py==1.7.1",
+        "discord.py==1.7.2",
         "google-api-python-client==2.3.0",
         "google-auth-httplib2==0.1.0",
         "pyotp==2.6.0",
