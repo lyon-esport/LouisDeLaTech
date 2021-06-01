@@ -254,6 +254,7 @@ class UserCog(commands.Cog):
     @commands.guild_only()
     @is_gsuite_admin
     async def update_signatures(self, ctx):
+        user_updated = 0
         try:
             users = get_users(self.bot.admin_sdk())
         except HttpError as e:
@@ -271,6 +272,7 @@ class UserCog(commands.Cog):
                     user.role,
                     user.team,
                 )
+                user_updated += 1
             except LouisDeLaTechError as e:
                 await ctx.send(f"{user['primaryEmail']} => {e.args[0]}")
                 continue
@@ -278,7 +280,7 @@ class UserCog(commands.Cog):
                 await ctx.send(format_google_api_error(e))
                 return
 
-        await ctx.send(f"Update signatures for {len(users)} users")
+        await ctx.send(f"Update signatures for {user_updated}/{len(users)} users")
 
 
 def setup(bot):
