@@ -24,6 +24,7 @@ sentry_dsn = ""
 [discord]
     token = ""
     initial_cogs = [
+        "extensions.config"
         "extensions.task",
         "extensions.management",
         "extensions.otp",
