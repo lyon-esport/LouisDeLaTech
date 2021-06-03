@@ -25,7 +25,7 @@ setup(
         "google-api-python-client==2.7.0",
         "google-auth-httplib2==0.1.0",
         "pyotp==2.6.0",
-        "tortoise-orm==0.17.3",
+        "tortoise-orm==0.17.4",
         "aiosqlite==0.16.1",
         "cryptography==3.4.7",
     ],
