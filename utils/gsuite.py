@@ -150,6 +150,11 @@ def update_user_department(admin_sdk, user_email, department):
     make_request(admin_sdk.users().update(userKey=user_email, body=body))
 
 
+def update_user_recovery(admin_sdk, user_email, recovery_email):
+    body = {"recoveryEmail": recovery_email}
+    make_request(admin_sdk.users().update(userKey=user_email, body=body))
+
+
 def add_user_group(admin_sdk, user_email, group_email):
     body = {
         "email": user_email,

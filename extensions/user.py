@@ -14,6 +14,7 @@ from utils.gsuite import (
     add_user,
     update_user_pseudo,
     update_user_department,
+    update_user_recovery,
     suspend_user,
     add_user_group,
     delete_user_group,
@@ -291,6 +292,26 @@ class UserCog(commands.Cog):
                 return
 
         await ctx.send(f"Update signatures for {user_updated}/{len(users)} users")
+
+    @commands.command(help="Update recovery information of an user")
+    @commands.guild_only()
+    @is_gsuite_admin
+    async def urecovery(self, ctx, member: discord.Member, backup_email):
+        try:
+            user = search_user(self.bot.admin_sdk(), member.name, member.id)
+        except LouisDeLaTechError as e:
+            await ctx.send(f"{member} => {e.args[0]}")
+            return
+        except HttpError as e:
+            await ctx.send(format_google_api_error(e))
+            raise
+        try:
+            update_user_recovery(self.bot.admin_sdk(), user.email, backup_email)
+        except HttpError as e:
+            await ctx.send(format_google_api_error(e))
+            raise
+
+        await ctx.send(f"Update recovery information for user {member.name}")
 
 
 def setup(bot):
