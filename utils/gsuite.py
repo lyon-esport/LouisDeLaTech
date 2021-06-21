@@ -58,10 +58,8 @@ def search_user(admin_sdk, discord_pseudo, discord_id):
             viewType="admin_view",
         )
     )
-    users = users["users"] if "users" in users else None
-    # API sometimes don't send back custom.discord_id
-    if "discord_id" not in users[0]["customSchemas"]["custom"]:
-        users[0]["customSchemas"]["custom"]["discord_id"] = discord_id
+
+    users = users["users"] if "users" in users else []
     if len(users) == 0:
         raise LouisDeLaTechError(
             f"No Gsuite account found with discord_id: {discord_id} for user {discord_pseudo}"
@@ -112,7 +110,9 @@ def update_user_pseudo(admin_sdk, user_email, pseudo):
     make_request(admin_sdk.users().update(userKey=user_email, body=body))
 
 
-def update_user_signature(gmail_sdk, user_email, firstname, lastname, role, team):
+def update_user_signature(
+    gmail_sdk, user_email, firstname, lastname, role, team, team_role
+):
     template = Template(
         open("./templates/google/gmail_signature.j2", encoding="utf-8").read()
     )
@@ -130,7 +130,7 @@ def update_user_signature(gmail_sdk, user_email, firstname, lastname, role, team
                         "firstname": firstname,
                         "lastname": lastname,
                         "role": role,
-                        "team": team,
+                        "team": team if team_role else None,
                     }
                 )
             },

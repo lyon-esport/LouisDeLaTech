@@ -49,6 +49,9 @@ class UserCog(commands.Cog):
         if user_team is None:
             await ctx.send(f"Role {new_role_name} does not exist, check bot config")
             return
+        elif not user_team["team_role"]:
+            await ctx.send(f"Role {new_role_name} is invalid, check bot config")
+            return
 
         try:
             add_user(
@@ -69,6 +72,7 @@ class UserCog(commands.Cog):
                 lastname,
                 None,
                 new_role_name,
+                user_team["team_role"],
             )
         except HttpError as e:
             await ctx.send(format_google_api_error(e))
@@ -168,7 +172,10 @@ class UserCog(commands.Cog):
         admin_sdk = self.bot.admin_sdk()
 
         if new_user_team is None:
-            await ctx.send(f"Role {user.team} does not exist, check bot config")
+            await ctx.send(f"Role {new_team_name} does not exist, check bot config")
+            return
+        elif not new_user_team["team_role"]:
+            await ctx.send(f"Role {new_user_team} is invalid, check bot config")
             return
 
         try:
@@ -183,6 +190,7 @@ class UserCog(commands.Cog):
                 user.lastname,
                 user.role,
                 user.team,
+                new_user_team["team_role"],
             )
         except HttpError as e:
             await ctx.send(format_google_api_error(e))
@@ -264,6 +272,7 @@ class UserCog(commands.Cog):
         for user in users:
             try:
                 user = User(user)
+                user_team = self.bot.config["teams"].get(user.team, None)
                 update_user_signature(
                     self.bot.gmail_sdk(user.email),
                     user.email,
@@ -271,6 +280,7 @@ class UserCog(commands.Cog):
                     user.lastname,
                     user.role,
                     user.team,
+                    user_team["team_role"],
                 )
                 user_updated += 1
             except LouisDeLaTechError as e:

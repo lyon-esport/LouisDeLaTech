@@ -1,6 +1,6 @@
 LouisDeLaTech is a discord bot manager for Lyon e-Sport
 
-![Python test](https://github.com/lyon-esport/intranet/workflows/Python%20test/badge.svg)
+![Python test](https://github.com/lyon-esport/LouisDeLaTech/workflows/Python%20test/badge.svg)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 # Requirements
@@ -16,6 +16,16 @@ Create a [discord bot](https://discord.com/developers/applications) and get the 
 - Enable Google workspace delegation
 - Generate keys and download the file (used by the bot `-g`)
 - [Add required scopes](https://admin.google.com/ac/owl/domainwidedelegation) for the service account (see config.example for the list of scopes)
+
+You must create [user custom attribute](https://admin.google.com/ac/customschema?hl=fr)
+
+
+```
+custom: {
+ pseudo: ""
+ discord_id: ""
+}
+```
 
 # Install
 ## Install dependencies

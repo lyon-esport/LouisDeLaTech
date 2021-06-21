@@ -1,26 +1,36 @@
 sentry_dsn = ""
 
 [teams]
+    [teams.ca]
+        discord = "Membres du CA"
+        google = ""
+        message_template = "ca.j2"
+        team_role = false
     [teams.marketing]
         discord = "Equipe Marketing"
         google = ""
         message_template = "marketing.j2"
+        team_role = true
     [teams.tournoi]
         discord = "Equipe Tournoi"
         google = ""
         message_template = "tournoi.j2"
+        team_role = true
     [teams.technique]
         discord = "Equipe Technique"
         google = ""
         message_template = "technique.j2"
+        team_role = true
     [teams."scène"]
         discord = "Equipe Scène"
         google = ""
         message_template = "scene.j2"
+        team_role = true
     [teams.logistique]
         discord = "Equipe Logistique"
         google = ""
         message_template = "logistique.j2"
+        team_role = true
 [discord]
     token = ""
     initial_cogs = [
