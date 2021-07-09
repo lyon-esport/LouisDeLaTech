@@ -31,6 +31,6 @@ setup(
     ],
     extras_require={
         "dev": ["pre-commit==2.13.0"],
-        "production": ["sentry-sdk==1.2.0"],
+        "production": ["sentry-sdk==1.3.0"],
     },
 )
