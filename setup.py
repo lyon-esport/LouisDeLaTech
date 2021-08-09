@@ -30,7 +30,7 @@ setup(
         "cryptography==3.4.7",
     ],
     extras_require={
-        "dev": ["pre-commit==2.13.0"],
+        "dev": ["pre-commit==2.14.0"],
         "production": ["sentry-sdk==1.3.1"],
     },
 )
