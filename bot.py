@@ -1,6 +1,7 @@
 import logging
 import traceback
 import sys
+import os
 
 import discord
 from discord.ext import tasks, commands
@@ -19,6 +20,8 @@ class LouisDeLaTech(commands.Bot):
             command_prefix=config["discord"]["command_prefix"],
             description="LouisDeLaTech is a discord bot manager for Lyon e-Sport",
         )
+
+        self.root_dir = os.path.dirname(os.path.abspath(__file__))
 
         self.config = config
         self.google_path = google_path

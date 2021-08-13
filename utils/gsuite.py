@@ -1,4 +1,5 @@
 import logging
+import os
 from functools import wraps
 from http.client import responses
 
@@ -111,11 +112,8 @@ def update_user_pseudo(admin_sdk, user_email, pseudo):
 
 
 def update_user_signature(
-    gmail_sdk, user_email, firstname, lastname, role, team, team_role
+    gmail_sdk, template, user_email, firstname, lastname, role, team, team_role
 ):
-    template = Template(
-        open("./templates/google/gmail_signature.j2", encoding="utf-8").read()
-    )
     make_request(
         gmail_sdk.users()
         .settings()

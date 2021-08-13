@@ -1,4 +1,5 @@
 import logging
+import os
 
 import discord
 from discord.ext import commands
@@ -46,6 +47,14 @@ class UserCog(commands.Cog):
         user_team = self.bot.config["teams"].get(new_role_name, None)
         password = generate_password()
         admin_sdk = self.bot.admin_sdk()
+        signature_template = Template(
+            open(
+                os.path.join(
+                    self.bot.root_dir, "./templates/google/gmail_signature.j2"
+                ),
+                encoding="utf-8",
+            ).read()
+        )
 
         if user_team is None:
             await ctx.send(f"Role {new_role_name} does not exist, check bot config")
@@ -68,6 +77,7 @@ class UserCog(commands.Cog):
             add_user_group(admin_sdk, user_email, user_team["google"])
             update_user_signature(
                 self.bot.gmail_sdk(user_email),
+                signature_template,
                 user_email,
                 firstname,
                 lastname,
@@ -102,13 +112,20 @@ class UserCog(commands.Cog):
         await ctx.send(f"User {member.name} provisionned")
 
         template = Template(
-            open("./templates/discord/base.j2", encoding="utf-8").read()
+            open(
+                os.path.join(self.bot.root_dir, "./templates/discord/base.j2"),
+                encoding="utf-8",
+            ).read()
         )
         await member.send(template.render({"email": user_email, "password": password}))
 
         template = Template(
             open(
-                f"./templates/discord/{user_team['message_template']}", encoding="utf-8"
+                os.path.join(
+                    self.bot.root_dir,
+                    f"./templates/discord/{user_team['message_template']}",
+                ),
+                encoding="utf-8",
             ).read()
         )
         team_message = template.render()
@@ -171,6 +188,14 @@ class UserCog(commands.Cog):
 
         new_user_team = self.bot.config["teams"].get(user.team, None)
         admin_sdk = self.bot.admin_sdk()
+        signature_template = Template(
+            open(
+                os.path.join(
+                    self.bot.root_dir, "./templates/google/gmail_signature.j2"
+                ),
+                encoding="utf-8",
+            ).read()
+        )
 
         if new_user_team is None:
             await ctx.send(f"Role {new_team_name} does not exist, check bot config")
@@ -186,6 +211,7 @@ class UserCog(commands.Cog):
             update_user_department(admin_sdk, user.email, user.team)
             update_user_signature(
                 self.bot.gmail_sdk(user.email),
+                signature_template,
                 user.email,
                 user.firstname,
                 user.lastname,
@@ -270,12 +296,22 @@ class UserCog(commands.Cog):
             await ctx.send(format_google_api_error(e))
             raise
 
+        signature_template = Template(
+            open(
+                os.path.join(
+                    self.bot.root_dir, "./templates/google/gmail_signature.j2"
+                ),
+                encoding="utf-8",
+            ).read()
+        )
+
         for user in users:
             try:
                 user = User(user)
                 user_team = self.bot.config["teams"].get(user.team, None)
                 update_user_signature(
                     self.bot.gmail_sdk(user.email),
+                    signature_template,
                     user.email,
                     user.firstname,
                     user.lastname,
