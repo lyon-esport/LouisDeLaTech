@@ -31,6 +31,10 @@ logger.info(f"Bot started")
 config = toml.load(args.config)
 logger.info(f"Config loaded")
 
+log_level = logging.getLevelName(config["log_level"])
+logger.setLevel(log_level)
+logger.info(f"Started bot with log level {logging.getLevelName(logger.level)}")
+
 if len(config["sentry_dsn"]) > 0:
     import sentry_sdk
 
