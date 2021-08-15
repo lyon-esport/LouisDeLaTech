@@ -69,12 +69,13 @@ def search_user(admin_sdk, discord_pseudo, discord_id):
         raise LouisDeLaTechError(
             f"Multiple Gsuite users with same discord_id: {discord_id} for user {discord_pseudo}"
         )
-    elif discord_id != users[0]["customSchemas"]["custom"]["discord_id"]:
+    user = User(users[0])
+    if discord_id != user.discord_id:
         raise LouisDeLaTechError(
             f"Stupid API send me an other user that does not match discord_id: {discord_id} for user {discord_pseudo}"
         )
 
-    return User(users[0])
+    return user
 
 
 def add_user(
@@ -144,6 +145,14 @@ def suspend_user(admin_sdk, user_email, author):
 def update_user_department(admin_sdk, user_email, department):
     body = {
         "organizations": [{"primary": True, "customType": "", "department": department}]
+    }
+    make_request(admin_sdk.users().update(userKey=user_email, body=body))
+
+
+def update_user_password(admin_sdk, user_email, password, temporary_pass):
+    body = {
+        "password": password,
+        "changePasswordAtNextLogin": temporary_pass,
     }
     make_request(admin_sdk.users().update(userKey=user_email, body=body))
 

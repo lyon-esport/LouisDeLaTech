@@ -14,7 +14,7 @@ class User:
             if "pseudo" in user["customSchemas"]["custom"]
             else None
         )
-        self.discord_id = user["customSchemas"]["custom"]["discord_id"]
+        self.discord_id = int(user["customSchemas"]["custom"]["discord_id"])
         self.email = user["primaryEmail"]
         self.team = user["organizations"][0]["department"]
         self.role = self.get_role(user)

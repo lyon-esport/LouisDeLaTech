@@ -31,7 +31,7 @@ custom: {
 ## Install dependencies
 ### Production
 
-    $ pip install -e .[production]
+    $ pip install -e .
 
 ### Dev
 

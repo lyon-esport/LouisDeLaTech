@@ -15,6 +15,7 @@ from utils.gsuite import (
     add_user,
     update_user_pseudo,
     update_user_department,
+    update_user_password,
     update_user_recovery,
     suspend_user,
     add_user_group,
@@ -329,7 +330,7 @@ class UserCog(commands.Cog):
 
         await ctx.send(f"Update signatures for {user_updated}/{len(users)} users")
 
-    @commands.command(help="Update recovery information of an user")
+    @commands.command(help="Update recovery email of an user")
     @commands.guild_only()
     @is_gsuite_admin
     async def urecovery(self, ctx, member: discord.Member, backup_email):
@@ -348,6 +349,38 @@ class UserCog(commands.Cog):
             raise
 
         await ctx.send(f"Update recovery information for user {member.name}")
+
+    @commands.command(help="Reset password of an user")
+    @commands.guild_only()
+    @is_gsuite_admin
+    async def rpassword(self, ctx, member: discord.Member):
+        try:
+            user = search_user(self.bot.admin_sdk(), member.name, member.id)
+        except LouisDeLaTechError as e:
+            await ctx.send(f"{member} => {e.args[0]}")
+            return
+        except HttpError as e:
+            await ctx.send(format_google_api_error(e))
+            raise
+
+        temp_pass = generate_password()
+        template = Template(
+            open(
+                os.path.join(
+                    self.bot.root_dir, "./templates/discord/reset_password.j2"
+                ),
+                encoding="utf-8",
+            ).read()
+        )
+
+        try:
+            update_user_password(self.bot.admin_sdk(), user.email, temp_pass, True)
+        except HttpError as e:
+            await ctx.send(format_google_api_error(e))
+            raise
+
+        await member.send(template.render({"email": user.email, "password": temp_pass}))
+        await ctx.send(f"Sended new password to {member.name} in PM")
 
 
 def setup(bot):
