@@ -14,7 +14,7 @@ class User:
             if "pseudo" in user["customSchemas"]["custom"]
             else None
         )
-        self.discord_id = int(user["customSchemas"]["custom"]["discord_id"])
+        self.discord_id = int(user["customSchemas"]["custom"]["discordId"])
         self.email = user["primaryEmail"]
         self.team = user["organizations"][0]["department"]
         self.role = self.get_role(user)
@@ -81,10 +81,10 @@ class User:
         elif (
             "customSchemas" not in user
             or "custom" not in user["customSchemas"]
-            or "discord_id" not in user["customSchemas"]["custom"]
+            or "discordId" not in user["customSchemas"]["custom"]
         ):
             raise LouisDeLaTechError(
-                "Discord ID not found, your discord_id is not setup on Gsuite"
+                "Discord ID not found, your discordId is not setup on Gsuite"
             )
         elif (
             "organizations" not in user or "department" not in user["organizations"][0]

@@ -3,8 +3,6 @@ import os
 from functools import wraps
 from http.client import responses
 
-from jinja2 import Template
-
 from utils.LouisDeLaTechError import LouisDeLaTechError
 from utils.User import User
 
@@ -53,7 +51,7 @@ def get_users(admin_sdk):
 def search_user(admin_sdk, discord_pseudo, discord_id):
     users = make_request(
         admin_sdk.users().list(
-            query=f"custom.discord_id={discord_id}",
+            query=f"custom.discordId={discord_id}",
             customer="my_customer",
             projection="full",
             viewType="admin_view",
@@ -63,17 +61,13 @@ def search_user(admin_sdk, discord_pseudo, discord_id):
     users = users["users"] if "users" in users else []
     if len(users) == 0:
         raise LouisDeLaTechError(
-            f"No Gsuite account found with discord_id: {discord_id} for user {discord_pseudo}"
+            f"No Gsuite account found with discordId: {discord_id} for user {discord_pseudo}"
         )
     elif len(users) > 1:
         raise LouisDeLaTechError(
-            f"Multiple Gsuite users with same discord_id: {discord_id} for user {discord_pseudo}"
+            f"Multiple Gsuite users with same discordId: {discord_id} for user {discord_pseudo}"
         )
     user = User(users[0])
-    if discord_id != user.discord_id:
-        raise LouisDeLaTechError(
-            f"Stupid API send me an other user that does not match discord_id: {discord_id} for user {discord_pseudo}"
-        )
 
     return user
 
