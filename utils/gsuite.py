@@ -12,7 +12,9 @@ def is_gsuite_admin(func):
     @wraps(func)
     async def wrapper(self, ctx, *args, **kwargs):
         try:
-            user = User(search_user(self.bot.admin_sdk(), ctx.author.name, ctx.author.id))
+            user = User(
+                search_user(self.bot.admin_sdk(), ctx.author.name, ctx.author.id)
+            )
         except LouisDeLaTechError as e:
             await ctx.send(f"{ctx.author} {e.args[0]}")
             return None
@@ -30,13 +32,15 @@ def format_google_api_error(error):
 
 
 def is_user_managed(admin_sdk, user_email, teams_to_skip):
-    user = make_request(admin_sdk.users().get(userKey=user_email, projection="full", viewType="admin_view"))
+    user = make_request(
+        admin_sdk.users().get(
+            userKey=user_email, projection="full", viewType="admin_view"
+        )
+    )
 
     if user is None:
-        raise LouisDeLaTechError(
-            f"No Gsuite account found for user: {user_email}"
-        )
-    
+        raise LouisDeLaTechError(f"No Gsuite account found for user: {user_email}")
+
     if User(user).team in teams_to_skip:
         raise LouisDeLaTechError(
             f"Gsuite account not managed by this bot for user: {user_email}"
@@ -66,6 +70,7 @@ def get_users(admin_sdk):
         users += resp["users"]
 
     return users
+
 
 def search_user(admin_sdk, discord_pseudo, discord_id):
     users = make_request(

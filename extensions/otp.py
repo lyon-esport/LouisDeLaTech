@@ -22,7 +22,9 @@ class OtpCog(commands.Cog):
     @is_team_allowed
     async def list_otp(self, ctx):
         try:
-            user = User(search_user(self.bot.admin_sdk(), ctx.author.name, ctx.author.id))
+            user = User(
+                search_user(self.bot.admin_sdk(), ctx.author.name, ctx.author.id)
+            )
         except LouisDeLaTechError as e:
             await ctx.send(f"{ctx.author} => {e.args[0]}")
             return
@@ -47,7 +49,9 @@ class OtpCog(commands.Cog):
     @is_team_allowed
     async def get_otp(self, ctx, name):
         try:
-            user = User(search_user(self.bot.admin_sdk(), ctx.author.name, ctx.author.id))
+            user = User(
+                search_user(self.bot.admin_sdk(), ctx.author.name, ctx.author.id)
+            )
         except LouisDeLaTechError as e:
             await ctx.send(f"{ctx.author} => {e.args[0]}")
             return
@@ -77,7 +81,9 @@ class OtpCog(commands.Cog):
         await ctx.message.delete()
 
         try:
-            user = User(search_user(self.bot.admin_sdk(), ctx.author.name, ctx.author.id))
+            user = User(
+                search_user(self.bot.admin_sdk(), ctx.author.name, ctx.author.id)
+            )
         except LouisDeLaTechError as e:
             await ctx.send(f"{ctx.author} => {e.args[0]}")
             return
@@ -101,7 +107,9 @@ class OtpCog(commands.Cog):
     @is_team_allowed
     async def delete_otp(self, ctx, name):
         try:
-            user = User(search_user(self.bot.admin_sdk(), ctx.author.name, ctx.author.id))
+            user = User(
+                search_user(self.bot.admin_sdk(), ctx.author.name, ctx.author.id)
+            )
         except LouisDeLaTechError as e:
             await ctx.send(f"{ctx.author} => {e.args[0]}")
             return

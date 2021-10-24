@@ -149,7 +149,9 @@ class UserCog(commands.Cog):
         """
         try:
             user = User(search_user(self.bot.admin_sdk(), member.name, member.id))
-            is_user_managed(self.bot.admin_sdk(), user.email, self.bot.config["teams_to_skip"])
+            is_user_managed(
+                self.bot.admin_sdk(), user.email, self.bot.config["teams_to_skip"]
+            )
         except LouisDeLaTechError as e:
             await ctx.send(f"{member} => {e.args[0]}")
             return
@@ -181,7 +183,9 @@ class UserCog(commands.Cog):
         """
         try:
             user = User(search_user(self.bot.admin_sdk(), member.name, member.id))
-            is_user_managed(self.bot.admin_sdk(), user.email, self.bot.config["teams_to_skip"])
+            is_user_managed(
+                self.bot.admin_sdk(), user.email, self.bot.config["teams_to_skip"]
+            )
             user.team = new_team_name
         except LouisDeLaTechError as e:
             await ctx.send(f"{member} => {e.args[0]}")
@@ -261,7 +265,9 @@ class UserCog(commands.Cog):
         """
         try:
             user = User(search_user(self.bot.admin_sdk(), member.name, member.id))
-            is_user_managed(self.bot.admin_sdk(), user.email, self.bot.config["teams_to_skip"])
+            is_user_managed(
+                self.bot.admin_sdk(), user.email, self.bot.config["teams_to_skip"]
+            )
             user.pseudo = new_pseudo
         except LouisDeLaTechError as e:
             await ctx.send(f"{member} => {e.args[0]}")
@@ -313,7 +319,9 @@ class UserCog(commands.Cog):
         for _user in users:
             try:
                 user = User(_user)
-                is_user_managed(self.bot.admin_sdk(), user.email, self.bot.config["teams_to_skip"])
+                is_user_managed(
+                    self.bot.admin_sdk(), user.email, self.bot.config["teams_to_skip"]
+                )
                 user_team = self.bot.config["teams"].get(user.team, None)
                 update_user_signature(
                     self.bot.gmail_sdk(user.email),
@@ -341,7 +349,9 @@ class UserCog(commands.Cog):
     async def urecovery(self, ctx, member: discord.Member, backup_email):
         try:
             user = User(search_user(self.bot.admin_sdk(), member.name, member.id))
-            is_user_managed(self.bot.admin_sdk(), user.email, self.bot.config["teams_to_skip"])
+            is_user_managed(
+                self.bot.admin_sdk(), user.email, self.bot.config["teams_to_skip"]
+            )
         except LouisDeLaTechError as e:
             await ctx.send(f"{member} => {e.args[0]}")
             return
@@ -362,7 +372,9 @@ class UserCog(commands.Cog):
     async def rpassword(self, ctx, member: discord.Member):
         try:
             user = User(search_user(self.bot.admin_sdk(), member.name, member.id))
-            is_user_managed(self.bot.admin_sdk(), user.email, self.bot.config["teams_to_skip"])
+            is_user_managed(
+                self.bot.admin_sdk(), user.email, self.bot.config["teams_to_skip"]
+            )
         except LouisDeLaTechError as e:
             await ctx.send(f"{member} => {e.args[0]}")
             return

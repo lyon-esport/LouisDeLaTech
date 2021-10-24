@@ -49,7 +49,9 @@ class LouisDeLaTech(commands.Bot):
     def admin_sdk(self):
         creds = self.credentials.with_subject(self.config["google"]["subject"])
         creds.refresh(Request())
-        return discovery.build("admin", "directory_v1", credentials=creds, cache_discovery=False)
+        return discovery.build(
+            "admin", "directory_v1", credentials=creds, cache_discovery=False
+        )
 
     def gmail_sdk(self, impersonate_user):
         creds = self.credentials.with_subject(impersonate_user)
