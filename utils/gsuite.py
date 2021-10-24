@@ -108,7 +108,7 @@ def add_user(
         "primaryEmail": email,
         "customSchemas": {
             "custom": {
-                "discord_id": discord_id,
+                "discordId": discord_id,
                 "pseudo": pseudo,
             },
         },

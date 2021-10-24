@@ -35,7 +35,7 @@ class UserCog(commands.Cog):
     @commands.guild_only()
     @is_gsuite_admin
     async def provision(
-        self, ctx, member: discord.Member, firstname, lastname, pseudo, new_role_name
+        self, ctx, member: discord.Member, firstname, lastname, pseudo, role_name
     ):
         """
         Provision an user
@@ -46,7 +46,7 @@ class UserCog(commands.Cog):
             => User will be created and added to team group
         """
         user_email = User.email_from_name(firstname, lastname)
-        user_team = self.bot.config["teams"].get(new_role_name, None)
+        user_team = self.bot.config["teams"].get(role_name, None)
         password = generate_password()
         admin_sdk = self.bot.admin_sdk()
         signature_template = Template(
@@ -59,10 +59,10 @@ class UserCog(commands.Cog):
         )
 
         if user_team is None:
-            await ctx.send(f"Role {new_role_name} is not managed by bot")
+            await ctx.send(f"Role {role_name} is not managed by bot")
             return
         elif not user_team["team_role"]:
-            await ctx.send(f"Role {new_role_name} is not a team role")
+            await ctx.send(f"Role {role_name} is not a team role")
             return
 
         try:
@@ -72,11 +72,11 @@ class UserCog(commands.Cog):
                 lastname,
                 user_email,
                 password,
-                new_role_name,
+                role_name,
                 member.id,
                 pseudo,
             )
-            add_user_group(admin_sdk, user_email, user_team["google"])
+            add_user_group(admin_sdk, user_email, user_team["google_email"])
             update_user_signature(
                 self.bot.gmail_sdk(user_email),
                 signature_template,
@@ -84,7 +84,7 @@ class UserCog(commands.Cog):
                 firstname,
                 lastname,
                 None,
-                new_role_name,
+                role_name,
                 user_team["team_role"],
             )
         except HttpError as e:
@@ -105,7 +105,7 @@ class UserCog(commands.Cog):
             await member.add_roles(role)
         else:
             await ctx.send(
-                f"Discord role {new_role_name} does not exist on discord server"
+                f"Discord role {role_name} does not exist on discord server"
             )
             return
 
@@ -215,7 +215,7 @@ class UserCog(commands.Cog):
         try:
             for v in self.bot.config["teams"].values():
                 delete_user_group(admin_sdk, user.email, v["google"])
-            add_user_group(admin_sdk, user.email, new_user_team["google"])
+            add_user_group(admin_sdk, user.email, new_user_team["google_email"])
             update_user_department(admin_sdk, user.email, user.team)
             update_user_signature(
                 self.bot.gmail_sdk(user.email),
