@@ -10,7 +10,6 @@ class TaskCog(commands.Cog):
         message = "Available roles :\n```"
 
         for team in self.bot.config["teams"]:
-            print(team)
             message += f"\n{team}"
 
         message += "```"

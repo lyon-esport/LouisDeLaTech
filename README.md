@@ -23,7 +23,7 @@ You must create [user custom attribute](https://admin.google.com/ac/customschema
 ```
 custom: {
  pseudo: ""
- discord_id: ""
+ discordId: ""
 }
 ```
 

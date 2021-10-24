@@ -6,6 +6,8 @@ from googleapiclient.errors import HttpError
 
 from utils.LouisDeLaTechError import LouisDeLaTechError
 from utils.gsuite import search_user, format_google_api_error
+from utils.discord import is_team_allowed
+from utils.User import User
 from models.otp import Otp
 
 logger = logging.getLogger(__name__)
@@ -17,9 +19,10 @@ class OtpCog(commands.Cog):
 
     @commands.command(name="lotp", help="List otp code")
     @commands.guild_only()
+    @is_team_allowed
     async def list_otp(self, ctx):
         try:
-            user = search_user(self.bot.admin_sdk(), ctx.author.name, ctx.author.id)
+            user = User(search_user(self.bot.admin_sdk(), ctx.author.name, ctx.author.id))
         except LouisDeLaTechError as e:
             await ctx.send(f"{ctx.author} => {e.args[0]}")
             return
@@ -41,9 +44,10 @@ class OtpCog(commands.Cog):
 
     @commands.command(name="gotp", help="Get otp code")
     @commands.guild_only()
+    @is_team_allowed
     async def get_otp(self, ctx, name):
         try:
-            user = search_user(self.bot.admin_sdk(), ctx.author.name, ctx.author.id)
+            user = User(search_user(self.bot.admin_sdk(), ctx.author.name, ctx.author.id))
         except LouisDeLaTechError as e:
             await ctx.send(f"{ctx.author} => {e.args[0]}")
             return
@@ -68,11 +72,12 @@ class OtpCog(commands.Cog):
 
     @commands.command(name="cotp", help="Create otp code")
     @commands.guild_only()
+    @is_team_allowed
     async def create_otp(self, ctx, name, digest, digits, secret):
         await ctx.message.delete()
 
         try:
-            user = search_user(self.bot.admin_sdk(), ctx.author.name, ctx.author.id)
+            user = User(search_user(self.bot.admin_sdk(), ctx.author.name, ctx.author.id))
         except LouisDeLaTechError as e:
             await ctx.send(f"{ctx.author} => {e.args[0]}")
             return
@@ -93,9 +98,10 @@ class OtpCog(commands.Cog):
 
     @commands.command(name="dotp", help="Delete otp code")
     @commands.guild_only()
+    @is_team_allowed
     async def delete_otp(self, ctx, name):
         try:
-            user = search_user(self.bot.admin_sdk(), ctx.author.name, ctx.author.id)
+            user = User(search_user(self.bot.admin_sdk(), ctx.author.name, ctx.author.id))
         except LouisDeLaTechError as e:
             await ctx.send(f"{ctx.author} => {e.args[0]}")
             return

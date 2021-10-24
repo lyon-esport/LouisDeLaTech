@@ -6,6 +6,7 @@ class User:
         """
         :param user: User object from google API
         """
+        print(user)
         self.check_user_setup(user)
         self.firstname = user["name"]["givenName"]
         self.lastname = user["name"]["familyName"]
@@ -19,6 +20,7 @@ class User:
         self.team = user["organizations"][0]["department"]
         self.role = self.get_role(user)
         self.is_admin = user["isAdmin"]
+        self.is_suspended = user["suspended"]
 
     @property
     def firstname(self):
@@ -76,19 +78,20 @@ class User:
 
     @classmethod
     def check_user_setup(cls, user):
+        print(user)
         if not user:
-            raise LouisDeLaTechError("User not found, your user is not setup on Gsuite")
+            raise LouisDeLaTechError("User not found, user is not setup on Gsuite")
         elif (
             "customSchemas" not in user
             or "custom" not in user["customSchemas"]
             or "discordId" not in user["customSchemas"]["custom"]
         ):
             raise LouisDeLaTechError(
-                "Discord ID not found, your discordId is not setup on Gsuite"
+                f"Discord ID not found, discordId is not setup on Gsuite for user: {user['primaryEmail']}"
             )
         elif (
             "organizations" not in user or "department" not in user["organizations"][0]
         ):
             raise LouisDeLaTechError(
-                "Department not found, your department is not setup on Gsuite"
+                f"Department not found, department is not setup on Gsuite for user: {user['primaryEmail']}"
             )

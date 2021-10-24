@@ -23,6 +23,7 @@ from utils.gsuite import (
     update_user_signature,
     is_gsuite_admin,
     format_google_api_error,
+    is_user_managed,
 )
 from utils.password import generate_password
 
@@ -58,10 +59,10 @@ class UserCog(commands.Cog):
         )
 
         if user_team is None:
-            await ctx.send(f"Role {new_role_name} does not exist, check bot config")
+            await ctx.send(f"Role {new_role_name} is not managed by bot")
             return
         elif not user_team["team_role"]:
-            await ctx.send(f"Role {new_role_name} is invalid, check bot config")
+            await ctx.send(f"Role {new_role_name} is not a team role")
             return
 
         try:
@@ -147,7 +148,8 @@ class UserCog(commands.Cog):
             => User will be suspended
         """
         try:
-            user = search_user(self.bot.admin_sdk(), member.name, member.id)
+            user = User(search_user(self.bot.admin_sdk(), member.name, member.id))
+            is_user_managed(self.bot.admin_sdk(), user.email, self.bot.config["teams_to_skip"])
         except LouisDeLaTechError as e:
             await ctx.send(f"{member} => {e.args[0]}")
             return
@@ -155,7 +157,7 @@ class UserCog(commands.Cog):
             await ctx.send(format_google_api_error(e))
             raise
         try:
-            suspend_user(self.bot.admin_sdk(), user.email, ctx.author)
+            suspend_user(self.bot.admin_sdk(), user.email)
         except HttpError as e:
             await ctx.send(format_google_api_error(e))
             raise
@@ -178,7 +180,8 @@ class UserCog(commands.Cog):
             => User signature will be updated
         """
         try:
-            user = search_user(self.bot.admin_sdk(), member.name, member.id)
+            user = User(search_user(self.bot.admin_sdk(), member.name, member.id))
+            is_user_managed(self.bot.admin_sdk(), user.email, self.bot.config["teams_to_skip"])
             user.team = new_team_name
         except LouisDeLaTechError as e:
             await ctx.send(f"{member} => {e.args[0]}")
@@ -257,7 +260,8 @@ class UserCog(commands.Cog):
             => User pseudo will be renamed
         """
         try:
-            user = search_user(self.bot.admin_sdk(), member.name, member.id)
+            user = User(search_user(self.bot.admin_sdk(), member.name, member.id))
+            is_user_managed(self.bot.admin_sdk(), user.email, self.bot.config["teams_to_skip"])
             user.pseudo = new_pseudo
         except LouisDeLaTechError as e:
             await ctx.send(f"{member} => {e.args[0]}")
@@ -306,9 +310,10 @@ class UserCog(commands.Cog):
             ).read()
         )
 
-        for user in users:
+        for _user in users:
             try:
-                user = User(user)
+                user = User(_user)
+                is_user_managed(self.bot.admin_sdk(), user.email, self.bot.config["teams_to_skip"])
                 user_team = self.bot.config["teams"].get(user.team, None)
                 update_user_signature(
                     self.bot.gmail_sdk(user.email),
@@ -322,7 +327,7 @@ class UserCog(commands.Cog):
                 )
                 user_updated += 1
             except LouisDeLaTechError as e:
-                await ctx.send(f"{user['primaryEmail']} => {e.args[0]}")
+                await ctx.send(f"{_user['primaryEmail']} => {e.args[0]}")
                 continue
             except HttpError as e:
                 await ctx.send(format_google_api_error(e))
@@ -335,7 +340,8 @@ class UserCog(commands.Cog):
     @is_gsuite_admin
     async def urecovery(self, ctx, member: discord.Member, backup_email):
         try:
-            user = search_user(self.bot.admin_sdk(), member.name, member.id)
+            user = User(search_user(self.bot.admin_sdk(), member.name, member.id))
+            is_user_managed(self.bot.admin_sdk(), user.email, self.bot.config["teams_to_skip"])
         except LouisDeLaTechError as e:
             await ctx.send(f"{member} => {e.args[0]}")
             return
@@ -355,7 +361,8 @@ class UserCog(commands.Cog):
     @is_gsuite_admin
     async def rpassword(self, ctx, member: discord.Member):
         try:
-            user = search_user(self.bot.admin_sdk(), member.name, member.id)
+            user = User(search_user(self.bot.admin_sdk(), member.name, member.id))
+            is_user_managed(self.bot.admin_sdk(), user.email, self.bot.config["teams_to_skip"])
         except LouisDeLaTechError as e:
             await ctx.send(f"{member} => {e.args[0]}")
             return

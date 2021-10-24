@@ -4,34 +4,39 @@ log_level = "DEBUG"
 [teams]
     [teams.ca]
         discord = "Membres du CA"
-        google = ""
+        google_email = ""
         message_template = "ca.j2"
         team_role = false
     [teams.marketing]
         discord = "Equipe Marketing"
-        google = ""
+        google_email = ""
         message_template = "marketing.j2"
         team_role = true
     [teams.tournoi]
         discord = "Equipe Tournoi"
-        google = ""
+        google_email = ""
         message_template = "tournoi.j2"
         team_role = true
     [teams.technique]
         discord = "Equipe Technique"
-        google = ""
+        google_email = ""
         message_template = "technique.j2"
         team_role = true
     [teams."scène"]
         discord = "Equipe Scène"
-        google = ""
+        google_email = ""
         message_template = "scene.j2"
         team_role = true
     [teams.logistique]
         discord = "Equipe Logistique"
-        google = ""
+        google_email = ""
         message_template = "logistique.j2"
         team_role = true
+
+[teams_to_skip]
+    [teams_to_skip.alumnis]
+        discord = "Alumnis"
+
 [discord]
     token = ""
     initial_cogs = [
@@ -45,6 +50,7 @@ log_level = "DEBUG"
     bot_activity = [
         "En train de parler sur le stream de jiji",
         "En train de regarder Nami sur la scène",
+        "En train de sertir des câbles parce que c'est fun",
     ]
     [discord.roles]
         default = [
