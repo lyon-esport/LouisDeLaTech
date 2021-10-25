@@ -44,7 +44,7 @@ class LouisDeLaTech(commands.Bot):
         creds = Credentials.from_service_account_file(
             self.google_path,
             scopes=self.config["google"]["scopes"]["admin"],
-            subject=self.config["google"]["subject"]
+            subject=self.config["google"]["subject"],
         )
 
         return discovery.build(
@@ -55,7 +55,7 @@ class LouisDeLaTech(commands.Bot):
         creds = Credentials.from_service_account_file(
             self.google_path,
             scopes=self.config["google"]["scopes"]["gmail"],
-            subject=user
+            subject=user,
         )
 
         return discovery.build("gmail", "v1", credentials=creds, cache_discovery=False)
