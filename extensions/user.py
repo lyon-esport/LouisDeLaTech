@@ -1,5 +1,6 @@
 import logging
 import os
+import time
 
 import discord
 from discord.ext import commands
@@ -77,6 +78,11 @@ class UserCog(commands.Cog):
                 pseudo,
             )
             add_user_group(admin_sdk, user_email, user_team["google_email"])
+            
+            # force time sleep or refresh token will cause an error
+            # maybe API caching issue (if request is too fast)
+            time.sleep(5)
+            
             update_user_signature(
                 self.bot.gmail_sdk(user_email),
                 signature_template,
@@ -111,7 +117,7 @@ class UserCog(commands.Cog):
 
         await member.edit(nick=User.discord_name(firstname, pseudo, lastname))
 
-        await ctx.send(f"User {member.name} provisionned")
+        await ctx.send(f"User {user_email} provisionned")
 
         template = Template(
             open(

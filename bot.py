@@ -9,7 +9,6 @@ from tortoise import Tortoise
 from cryptography.fernet import Fernet
 from googleapiclient import discovery
 from google.oauth2.service_account import Credentials
-from google.auth.transport.requests import Request
 
 logger = logging.getLogger(__name__)
 
@@ -28,11 +27,6 @@ class LouisDeLaTech(commands.Bot):
 
         self.fernet = Fernet(self.config["db"]["secret_key"])
 
-        self.credentials = Credentials.from_service_account_file(
-            self.google_path,
-            scopes=self.config["google"]["scopes"],
-        )
-
     def encrypt(self, s):
         return self.fernet.encrypt(s.encode("ascii"))
 
@@ -47,15 +41,23 @@ class LouisDeLaTech(commands.Bot):
         await Tortoise.generate_schemas()
 
     def admin_sdk(self):
-        creds = self.credentials.with_subject(self.config["google"]["subject"])
-        creds.refresh(Request())
+        creds = Credentials.from_service_account_file(
+            self.google_path,
+            scopes=self.config["google"]["scopes"]["admin"],
+            subject=self.config["google"]["subject"]
+        )
+
         return discovery.build(
             "admin", "directory_v1", credentials=creds, cache_discovery=False
         )
 
-    def gmail_sdk(self, impersonate_user):
-        creds = self.credentials.with_subject(impersonate_user)
-        creds.refresh(Request())
+    def gmail_sdk(self, user):
+        creds = Credentials.from_service_account_file(
+            self.google_path,
+            scopes=self.config["google"]["scopes"]["gmail"],
+            subject=user
+        )
+
         return discovery.build("gmail", "v1", credentials=creds, cache_discovery=False)
 
     async def on_ready(self):

@@ -63,13 +63,16 @@ log_level = "DEBUG"
         ]
 
 [google]
-subject = ""
-scopes = [
-    "https://www.googleapis.com/auth/admin.directory.user",
-    "https://www.googleapis.com/auth/admin.directory.group",
-    "https://www.googleapis.com/auth/gmail.settings.basic",
-    "https://www.googleapis.com/auth/gmail.settings.sharing",
-]
+    subject = ""
+    [google.scopes]
+        admin = [
+            "https://www.googleapis.com/auth/admin.directory.user",
+            "https://www.googleapis.com/auth/admin.directory.group",
+        ]
+        gmail = [
+            "https://www.googleapis.com/auth/gmail.settings.basic",
+            "https://www.googleapis.com/auth/gmail.settings.sharing",
+        ]
 
 [db]
 filename = "db.sqlite3"
