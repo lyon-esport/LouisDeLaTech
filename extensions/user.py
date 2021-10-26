@@ -218,7 +218,7 @@ class UserCog(commands.Cog):
 
         try:
             for v in self.bot.config["teams"].values():
-                delete_user_group(admin_sdk, user.email, v["google"])
+                delete_user_group(admin_sdk, user.email, v["google_email"])
             add_user_group(admin_sdk, user.email, new_user_team["google_email"])
             update_user_department(admin_sdk, user.email, user.team)
             update_user_signature(
