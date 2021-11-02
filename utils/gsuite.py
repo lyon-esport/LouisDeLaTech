@@ -39,11 +39,11 @@ def is_user_managed(admin_sdk, user_email, teams_to_skip):
     )
 
     if user is None:
-        raise LouisDeLaTechError(f"No Gsuite account found for user: {user_email}")
+        raise LouisDeLaTechError(f"No Gsuite account found for this user")
 
     if User(user).team in teams_to_skip:
         raise LouisDeLaTechError(
-            f"Gsuite account not managed by this bot for user: {user_email}"
+            f"Gsuite account not managed by this bot for this user"
         )
 
 
