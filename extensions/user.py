@@ -339,7 +339,7 @@ class UserCog(commands.Cog):
                 )
                 user_updated += 1
             except LouisDeLaTechError as e:
-                await ctx.send(f"{_user['primaryEmail']} => {e.args[0]}")
+                await ctx.send(f"{e.args[0]}")
                 continue
             except HttpError as e:
                 await ctx.send(format_google_api_error(e))
