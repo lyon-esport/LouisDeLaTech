@@ -1,14 +1,14 @@
 import logging
 
-from discord.ext import commands
 import pyotp
+from discord.ext import commands
 from googleapiclient.errors import HttpError
 
-from utils.LouisDeLaTechError import LouisDeLaTechError
-from utils.gsuite import search_user, format_google_api_error
-from utils.discord import is_team_allowed
-from utils.User import User
 from models.otp import Otp
+from utils.discord import is_team_allowed
+from utils.gsuite import format_google_api_error, search_user
+from utils.LouisDeLaTechError import LouisDeLaTechError
+from utils.User import User
 
 logger = logging.getLogger(__name__)
 

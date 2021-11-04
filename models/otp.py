@@ -1,7 +1,7 @@
 from enum import Enum
 
-from tortoise.models import Model
 from tortoise import fields
+from tortoise.models import Model
 
 
 class Digest(str, Enum):
