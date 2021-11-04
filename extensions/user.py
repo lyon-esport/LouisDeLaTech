@@ -162,6 +162,7 @@ class UserCog(commands.Cog):
         except HttpError as e:
             await ctx.send(format_google_api_error(e))
             raise
+        
         try:
             suspend_user(self.bot.admin_sdk(), user.email)
         except HttpError as e:
@@ -255,7 +256,7 @@ class UserCog(commands.Cog):
             await ctx.send(f"Discord role {user.team} does not exist")
             return
 
-        await ctx.send(f"User {member.name} is now member of {user.team}")
+        await ctx.send(f"User {member.name} is now member of team: {user.team}")
 
     @commands.command(name="upseudo", help="Update user pseudo")
     @commands.guild_only()
@@ -296,7 +297,7 @@ class UserCog(commands.Cog):
             nick=User.discord_name(user.firstname, user.pseudo, user.lastname)
         )
 
-        await ctx.send(f"User {old_nick} is now {member.nick}")
+        await ctx.send(f"User {old_nick} you now shall be called {member.nick} !")
 
     @commands.command(
         name="usignatures", help="Update the signature of all users on gmail"
@@ -320,6 +321,7 @@ class UserCog(commands.Cog):
             ).read()
         )
 
+        await ctx.send(f"Starting to update {len(users)} users")
         for _user in users:
             try:
                 user = User(_user)
@@ -345,7 +347,7 @@ class UserCog(commands.Cog):
                 await ctx.send(format_google_api_error(e))
                 return
 
-        await ctx.send(f"Update signatures for {user_updated}/{len(users)} users")
+        await ctx.send(f"Updated signatures for {user_updated}/{len(users)} users")
 
     @commands.command(help="Update recovery email of an user")
     @commands.guild_only()
@@ -368,7 +370,7 @@ class UserCog(commands.Cog):
             await ctx.send(format_google_api_error(e))
             raise
 
-        await ctx.send(f"Update recovery information for user {member.name}")
+        await ctx.send(f"Updated recovery information for user {member.name}")
 
     @commands.command(help="Reset password of an user")
     @commands.guild_only()
@@ -403,7 +405,7 @@ class UserCog(commands.Cog):
             raise
 
         await member.send(template.render({"email": user.email, "password": temp_pass}))
-        await ctx.send(f"Sended new password to {member.name} in PM")
+        await ctx.send(f"Sent a new password to {member.name} in PM")
 
 
 def setup(bot):
