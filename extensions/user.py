@@ -162,7 +162,7 @@ class UserCog(commands.Cog):
         except HttpError as e:
             await ctx.send(format_google_api_error(e))
             raise
-        
+
         try:
             suspend_user(self.bot.admin_sdk(), user.email)
         except HttpError as e:
