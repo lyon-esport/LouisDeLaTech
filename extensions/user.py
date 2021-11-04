@@ -4,29 +4,29 @@ import time
 
 import discord
 from discord.ext import commands
-from discord.utils import get
+from discord.utils import escape_markdown, get
 from googleapiclient.errors import HttpError
 from jinja2 import Template
 
-from utils.LouisDeLaTechError import LouisDeLaTechError
-from utils.User import User
 from utils.gsuite import (
-    search_user,
-    get_users,
     add_user,
-    update_user_pseudo,
-    update_user_department,
-    update_user_password,
-    update_user_recovery,
-    suspend_user,
     add_user_group,
     delete_user_group,
-    update_user_signature,
-    is_gsuite_admin,
     format_google_api_error,
+    get_users,
+    is_gsuite_admin,
     is_user_managed,
+    search_user,
+    suspend_user,
+    update_user_department,
+    update_user_password,
+    update_user_pseudo,
+    update_user_recovery,
+    update_user_signature,
 )
+from utils.LouisDeLaTechError import LouisDeLaTechError
 from utils.password import generate_password
+from utils.User import User
 
 logger = logging.getLogger(__name__)
 
@@ -388,7 +388,8 @@ class UserCog(commands.Cog):
             await ctx.send(format_google_api_error(e))
             raise
 
-        temp_pass = generate_password()
+        temp_pass = escape_markdown(generate_password())
+
         template = Template(
             open(
                 os.path.join(
