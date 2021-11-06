@@ -123,7 +123,11 @@ class UserCog(commands.Cog):
                 encoding="utf-8",
             ).read()
         )
-        await member.send(template.render({"email": user_email, "password": password}))
+        await member.send(
+            template.render(
+                {"email": user_email, "password": escape_markdown(password)}
+            )
+        )
 
         template = Template(
             open(
@@ -388,7 +392,7 @@ class UserCog(commands.Cog):
             await ctx.send(format_google_api_error(e))
             raise
 
-        temp_pass = escape_markdown(generate_password())
+        temp_pass = generate_password()
 
         template = Template(
             open(
@@ -405,7 +409,11 @@ class UserCog(commands.Cog):
             await ctx.send(format_google_api_error(e))
             raise
 
-        await member.send(template.render({"email": user.email, "password": temp_pass}))
+        await member.send(
+            template.render(
+                {"email": user.email, "password": escape_markdown(temp_pass)}
+            )
+        )
         await ctx.send(f"Sent a new password to {member.name} in PM")
 
 
