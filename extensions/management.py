@@ -13,36 +13,43 @@ class TaskCog(commands.Cog):
         await ctx.channel.edit(topic=description)
         await ctx.send("Channel topic updated")
 
-    # Listener pour la création des salons vocaux de réunion (et leur supression)
+    # Meeting voice channel creation & deletion listener
     @commands.Cog.listener()
     async def on_voice_state_update(self, member, before, after):
-        # Création
-        try:
-            if (
-                after.channel.name
-                == self.bot.config["voicechannelcreation"]["triggerchannel_name"]
-                and not member.bot
-            ):
-                newchannel = await member.guild.create_voice_channel(
-                    self.bot.config["voicechannelcreation"]["newchannel_name"],
-                    overwrites=None,
-                    category=after.channel.category,
-                )
-                await member.move_to(newchannel)
-        except:
-            pass
+        # Create voice channel
+        if (
+            after.channel
+            and after.channel.name
+            == self.bot.config["voice_channel_creation"]["trigger_channel_name"]
+            and not member.bot
+        ):
+            list_channels_name = []
 
-        # Supression
-        try:
-            if (
-                before.channel.name
-                == self.bot.config["voicechannelcreation"]["newchannel_name"]
-                and not member.bot
-            ):
-                if not before.channel.members:
-                    await before.channel.delete(reason="Channel is empty")
-        except:
-            pass
+            for channel in after.channel.category.voice_channels:
+                if channel.name.startswith(
+                    self.bot.config["voice_channel_creation"]["new_channel_name"]
+                ):
+                    list_channels_name.insert(len(list_channels_name), channel.name)
+            # temp debug
+            # print(list_channels_name)
+
+            newchannel = await member.guild.create_voice_channel(
+                self.bot.config["voice_channel_creation"]["new_channel_name"],
+                overwrites=None,
+                category=after.channel.category,
+            )
+            await member.move_to(newchannel)
+
+        # Delete voice channel
+        if (
+            before.channel
+            and before.channel.name.startswith(
+                self.bot.config["voice_channel_creation"]["new_channel_name"]
+            )
+            and not member.bot
+        ):
+            if not before.channel.members:
+                await before.channel.delete(reason="Channel is empty")
 
 
 def setup(bot):

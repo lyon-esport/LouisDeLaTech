@@ -37,6 +37,10 @@ log_level = "DEBUG"
     [teams_to_skip.alumnis]
         discord = "Alumnis"
 
+[voice_channel_creation]
+    trigger_channel_name = "Créer un salon vocal"
+    new_channel_name = "🤝 Réunion"
+
 [discord]
     token = ""
     initial_cogs = [
