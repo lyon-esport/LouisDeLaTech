@@ -53,6 +53,7 @@ class TaskCog(commands.Cog):
                 + new_channel_number,
                 overwrites=None,
                 category=after.channel.category,
+                bitrate=96000,
             )
             await member.move_to(new_channel)
 
