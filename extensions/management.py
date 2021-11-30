@@ -41,12 +41,12 @@ class TaskCog(commands.Cog):
             channel_number = 1
 
             while new_channel_name is None:
+                channel_name_check = f'{self.bot.config["voice_channel_creation"]["new_channel_name"]} #{channel_number}'
                 if (
-                    not f'{self.bot.config["voice_channel_creation"]["new_channel_name"]} #{channel_number}'
-                    in list_channels_name
+                    not channel_name_check in list_channels_name
                     or not list_channels_name
                 ):
-                    new_channel_name = f'{self.bot.config["voice_channel_creation"]["new_channel_name"]} #{channel_number}'
+                    new_channel_name = channel_name_check
                 channel_number = channel_number + 1
 
             # Create the channel and move member
