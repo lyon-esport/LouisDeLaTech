@@ -25,35 +25,36 @@ class TaskCog(commands.Cog):
             == self.bot.config["voice_channel_creation"]["trigger_channel_name"]
             and not member.bot
         ):
+            # List meeting channels already existing in the user's category and order it
             list_channels_name = []
 
-            # List meeting channels already existing in the user's category
-            for channel in after.channel.category.voice_channels:
-                if channel.name.startswith(
+            def predicate(channel):
+                return channel.name.startswith(
                     self.bot.config["voice_channel_creation"]["new_channel_name"]
-                ):
-                    list_channels_name.insert(len(list_channels_name), channel.name)
+                )
+
+            for channel in filter(predicate, after.channel.category.voice_channels):
+                list_channels_name.append(channel.name)
 
             # Iterate through the existing channels (if they exist) to create an non-existing one
-            for i in count(1):
+            new_channel_name = None
+            channel_number = 1
+
+            while new_channel_name is None:
+                channel_name_check = f'{self.bot.config["voice_channel_creation"]["new_channel_name"]} #{channel_number}'
                 if (
-                    not self.bot.config["voice_channel_creation"]["new_channel_name"]
-                    + " #"
-                    + str(i)
-                    in list_channels_name
+                    not channel_name_check in list_channels_name
                     or not list_channels_name
                 ):
-                    new_channel_number = str(i)
-                    break
+                    new_channel_name = channel_name_check
+                channel_number = channel_number + 1
 
             # Create the channel and move member
             new_channel = await member.guild.create_voice_channel(
-                self.bot.config["voice_channel_creation"]["new_channel_name"]
-                + " #"
-                + new_channel_number,
+                new_channel_name,
                 overwrites=None,
                 category=after.channel.category,
-                bitrate=96000,
+                bitrate=self.bot.config["voice_channel_creation"]["bitrate"],
             )
             await member.move_to(new_channel)
 
@@ -64,9 +65,9 @@ class TaskCog(commands.Cog):
                 self.bot.config["voice_channel_creation"]["new_channel_name"]
             )
             and not member.bot
+            and not before.channel.members
         ):
-            if not before.channel.members:
-                await before.channel.delete(reason="Channel is empty")
+            await before.channel.delete(reason="Channel is empty")
 
 
 def setup(bot):

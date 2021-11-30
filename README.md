@@ -78,3 +78,4 @@ Contributor(s):
 
 - Ortega Ludovic - ludovic.ortega@lyon-esport.fr
 - Etienne "PoPs" G. - etienne.guilluy@lyon-esport.fr
+- Pierre "DrumSlayer" Sarret - pierre.sarret@lyon-esport.fr
