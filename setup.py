@@ -29,7 +29,7 @@ setup(
         "tortoise-orm==0.17.8",
         "aiosqlite==0.16.1",
         "cryptography==36.0.1",
-        "sentry-sdk==1.5.0",
+        "sentry-sdk==1.5.1",
     ],
     extras_require={
         "dev": ["pre-commit==2.16.0"],
