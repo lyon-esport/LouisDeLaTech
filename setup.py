@@ -32,6 +32,6 @@ setup(
         "sentry-sdk==1.5.2",
     ],
     extras_require={
-        "dev": ["pre-commit==2.16.0"],
+        "dev": ["pre-commit==2.17.0"],
     },
 )
