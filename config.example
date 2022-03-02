@@ -45,7 +45,7 @@ log_level = "DEBUG"
 [discord]
     token = ""
     initial_cogs = [
-        "extensions.config"
+        "extensions.config",
         "extensions.task",
         "extensions.management",
         "extensions.otp",
