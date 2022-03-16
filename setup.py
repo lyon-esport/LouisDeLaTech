@@ -28,7 +28,7 @@ setup(
         "pyotp==2.6.0",
         "tortoise-orm==0.18.1",
         "aiosqlite==0.16.1",
-        "cryptography==36.0.1",
+        "cryptography==36.0.2",
         "sentry-sdk==1.5.7",
     ],
     extras_require={
