@@ -15,7 +15,7 @@ class CatCog(commands.Cog):
 
     @commands.command(name="cat", help="Get cat")
     async def get_cat(self, ctx: Context):
-        with httpx.AsyncClient() as client:
+        async with httpx.AsyncClient() as client:
             cat_data = await client.get("https://api.thecatapi.com/v1/images/search")
 
         payload = cat_data.json()
