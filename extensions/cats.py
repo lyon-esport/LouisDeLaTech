@@ -27,3 +27,7 @@ class CatCog(commands.Cog):
             title="Here is your kitty",
         ).set_image(url=cat_url)
         await ctx.send(embed=embed)
+
+
+def setup(bot):
+    bot.add_cog(CatCog(bot))
