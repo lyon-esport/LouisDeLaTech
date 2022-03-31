@@ -30,6 +30,7 @@ setup(
         "aiosqlite==0.16.1",
         "cryptography==36.0.2",
         "sentry-sdk==1.5.8",
+        "httpx==0.22.0"
     ],
     extras_require={
         "dev": ["pre-commit==2.17.0"],
