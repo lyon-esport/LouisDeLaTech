@@ -50,6 +50,7 @@ log_level = "DEBUG"
         "extensions.management",
         "extensions.otp",
         "extensions.user",
+        "extensions.cats",
     ]
     command_prefix = "!"
     bot_activity = [
