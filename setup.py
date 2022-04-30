@@ -33,6 +33,6 @@ setup(
         "httpx==0.22.0"
     ],
     extras_require={
-        "dev": ["pre-commit==2.17.0"],
+        "dev": ["pre-commit==2.18.1"],
     },
 )
