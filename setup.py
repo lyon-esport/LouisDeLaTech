@@ -27,7 +27,7 @@ setup(
         "google-auth-httplib2==0.1.0",
         "pyotp==2.6.0",
         "tortoise-orm==0.19.0",
-        "aiosqlite==0.16.1",
+        "aiosqlite==0.17.0",
         "cryptography==37.0.1",
         "sentry-sdk==1.5.10",
         "httpx==0.22.0"
