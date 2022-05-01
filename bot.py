@@ -74,5 +74,5 @@ class LouisDeLaTech(commands.Bot):
             )
 
     async def close(self):
-        await Tortoise.close_connections()
+        await Tortoise.close_all()
         super()
