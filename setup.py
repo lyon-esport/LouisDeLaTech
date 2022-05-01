@@ -17,7 +17,7 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     zip_safe=False,
-    python_requires=">=3.8,<3.10",
+    python_requires=">=3.8,<3.11",
     install_requires=[
         "discord.py==1.7.3",
         "toml==0.10.2",
@@ -30,7 +30,7 @@ setup(
         "aiosqlite==0.17.0",
         "cryptography==37.0.1",
         "sentry-sdk==1.5.10",
-        "httpx==0.22.0"
+        "httpx==0.22.0",
     ],
     extras_require={
         "dev": ["pre-commit==2.18.1"],
