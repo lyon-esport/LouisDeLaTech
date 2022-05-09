@@ -8,7 +8,7 @@ from cryptography.fernet import Fernet
 from discord.ext import commands
 from google.oauth2.service_account import Credentials
 from googleapiclient import discovery
-from tortoise import Tortoise
+from tortoise import Tortoise, connections
 
 logger = logging.getLogger(__name__)
 
@@ -74,5 +74,5 @@ class LouisDeLaTech(commands.Bot):
             )
 
     async def close(self):
-        await Tortoise.close_all()
+        await connections.close_all()
         super()
