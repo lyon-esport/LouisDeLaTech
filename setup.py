@@ -23,7 +23,7 @@ setup(
         "toml==0.10.2",
         "Jinja2==3.1.2",
         "discord.py==1.7.3",
-        "google-api-python-client==2.47.0",
+        "google-api-python-client==2.48.0",
         "google-auth-httplib2==0.1.0",
         "pyotp==2.6.0",
         "tortoise-orm==0.19.0",
