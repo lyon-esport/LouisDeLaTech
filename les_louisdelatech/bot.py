@@ -36,7 +36,7 @@ class LouisDeLaTech(commands.Bot):
     async def init_tortoise(self):
         await Tortoise.init(
             db_url=f"sqlite://{self.config['db']['filename']}",
-            modules={"models": ["models.otp"]},
+            modules={"models": ["les_louisdelatech.models"]},
         )
         await Tortoise.generate_schemas()
 

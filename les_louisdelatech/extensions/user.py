@@ -8,7 +8,7 @@ from discord.utils import escape_markdown, get
 from googleapiclient.errors import HttpError
 from jinja2 import Template
 
-from utils.gsuite import (
+from les_louisdelatech.utils.gsuite import (
     add_user,
     add_user_group,
     delete_user_group,
@@ -24,9 +24,9 @@ from utils.gsuite import (
     update_user_recovery,
     update_user_signature,
 )
-from utils.LouisDeLaTechError import LouisDeLaTechError
-from utils.password import generate_password
-from utils.User import User
+from les_louisdelatech.utils.LouisDeLaTechError import LouisDeLaTechError
+from les_louisdelatech.utils.password import generate_password
+from les_louisdelatech.utils.User import User
 
 logger = logging.getLogger(__name__)
 

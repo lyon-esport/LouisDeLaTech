@@ -2,7 +2,7 @@ from itertools import count
 
 from discord.ext import commands
 
-from utils.discord import is_team_allowed
+from les_louisdelatech.utils.discord import is_team_allowed
 
 
 class TaskCog(commands.Cog):

@@ -45,12 +45,12 @@ log_level = "DEBUG"
 [discord]
     token = ""
     initial_cogs = [
-        "extensions.config",
-        "extensions.task",
-        "extensions.management",
-        "extensions.otp",
-        "extensions.user",
-        "extensions.cats",
+        "les_louisdelatech.extensions.config",
+        "les_louisdelatech.extensions.task",
+        "les_louisdelatech.extensions.management",
+        "les_louisdelatech.extensions.otp",
+        "les_louisdelatech.extensions.user",
+        "les_louisdelatech.extensions.cats",
     ]
     command_prefix = "!"
     bot_activity = [

@@ -1,4 +1,4 @@
-from utils.LouisDeLaTechError import LouisDeLaTechError
+from les_louisdelatech.utils.LouisDeLaTechError import LouisDeLaTechError
 
 
 class User:

@@ -4,11 +4,11 @@ import pyotp
 from discord.ext import commands
 from googleapiclient.errors import HttpError
 
-from models.otp import Otp
-from utils.discord import is_team_allowed
-from utils.gsuite import format_google_api_error, search_user
-from utils.LouisDeLaTechError import LouisDeLaTechError
-from utils.User import User
+from les_louisdelatech.models.otp import Otp
+from les_louisdelatech.utils.discord import is_team_allowed
+from les_louisdelatech.utils.gsuite import format_google_api_error, search_user
+from les_louisdelatech.utils.LouisDeLaTechError import LouisDeLaTechError
+from les_louisdelatech.utils.User import User
 
 logger = logging.getLogger(__name__)
 

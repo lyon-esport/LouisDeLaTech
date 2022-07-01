@@ -1,7 +1,9 @@
 # LouisDeLaTech is a discord bot manager for Lyon e-Sport
 
-![Python test](https://github.com/lyon-esport/LouisDeLaTech/workflows/Python%20test/badge.svg)
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![PyPI](https://img.shields.io/pypi/v/les-louisdelatech.svg)](https://pypi.python.org/pypi/les-louisdelatech)
+[![PyPI versions](https://img.shields.io/pypi/pyversions/les-louisdelatech.svg)](https://pypi.python.org/pypi/les-louisdelatech)
+[![Python test](https://github.com/lyon-esport/LouisDeLaTech/actions/workflows/test.yml/badge.svg)](https://github.com/lyon-esport/LouisDeLaTech/actions/workflows/test.yml)
+[![Code Style](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
 
 ## Requirements
 
@@ -30,24 +32,13 @@ custom: {
 }
 ```
 
-## Install
-
-### Install dependencies
-
-#### Production
+# Install
 
 ```bash
-pip install -e .
+pip install les_louisdelatech
 ```
 
-#### Dev
-
-```bash
-pip install -e .[dev]
-pre-commit install
-```
-
-### Configure
+# Configure
 
 Generate a secret_key to encrypt database secrets
 
@@ -58,10 +49,25 @@ Generate a secret_key to encrypt database secrets
 
 Fill `config.toml` with `config.example`
 
-### Run
+# Run
 
 ```bash
-python main.py -c config.toml -g google.json
+python3 -m les_louisdelatech.main -c config.toml -g google.json
+```
+
+# Dev
+
+Install [Poetry](https://python-poetry.org/docs/master/#installing-with-the-official-installer) with version >= 1.2.0a1
+
+```bash
+poetry install
+poetry shell
+pre-commit install
+```
+
+### Run pre-commit
+```
+pre-commit run --all-files
 ```
 
 ## Licence

@@ -1,9 +1,10 @@
 import logging
 from argparse import ArgumentParser
 
+import sentry_sdk
 import toml
 
-from bot import LouisDeLaTech
+from les_louisdelatech.bot import LouisDeLaTech
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s:%(message)s")
 logger = logging.getLogger(__name__)
@@ -36,8 +37,6 @@ logger.setLevel(log_level)
 logger.info(f"Started bot with log level {logging.getLevelName(logger.level)}")
 
 if len(config["sentry_dsn"]) > 0:
-    import sentry_sdk
-
     sentry_sdk.init(
         config["sentry_dsn"],
         # Set traces_sample_rate to 1.0 to capture 100%

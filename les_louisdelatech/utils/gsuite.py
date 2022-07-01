@@ -2,8 +2,8 @@ import logging
 from functools import wraps
 from http.client import responses
 
-from utils.LouisDeLaTechError import LouisDeLaTechError
-from utils.User import User
+from les_louisdelatech.utils.LouisDeLaTechError import LouisDeLaTechError
+from les_louisdelatech.utils.User import User
 
 logger = logging.getLogger(__name__)
 
