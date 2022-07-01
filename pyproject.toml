@@ -1,0 +1,51 @@
+[tool.poetry]
+name = "les-louisdelatech"
+version = "0"
+description = "LouisDeLaTech is a discord bot manager for Lyon e-Sport"
+authors = [
+    "Ludovic Ortega <ludovic.ortega@lyon-esport.fr>",
+    "Etienne 'PoPs' G. <etienne.guilluy@lyon-esport.fr>",
+    "Pierre 'DrumSlayer' Sarret <pierre.sarret@lyon-esport.fr>",
+
+]
+license = "CeCILL"
+readme = "README.md"
+homepage = "https://github.com/lyon-esport/LouisDeLaTech"
+repository = "https://github.com/lyon-esport/LouisDeLaTech"
+keywords = ["google", "discord"]
+classifiers = [
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Operating System :: OS Independent",
+    "License :: OSI Approved :: CEA CNRS Inria Logiciel Libre License, version 2.1 (CeCILL-2.1)",
+    "Topic :: Utilities",
+]
+include = [
+    "LICENSE",
+    "LICENSE.fr",
+]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+"discord.py" = "^1.7.3"
+toml = "^0.10.2"
+Jinja2 = "^3.1.2"
+google-api-python-client = "^2.52.0"
+google-auth-httplib2 = "^0.1.0"
+pyotp = "^2.6.0"
+tortoise-orm = "^0.19.1"
+aiosqlite = "^0.17.0"
+cryptography = "^37.0.3"
+sentry-sdk = "^1.6.0"
+
+[tool.poetry.dev-dependencies]
+pre-commit = "^2.19.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry-version-plugin]
+source = "git-tag"
