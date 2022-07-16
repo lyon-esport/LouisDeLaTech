@@ -2,7 +2,7 @@ import logging
 from argparse import ArgumentParser
 
 import sentry_sdk
-import toml
+import tomli
 
 from les_louisdelatech.bot import LouisDeLaTech
 
@@ -29,7 +29,9 @@ parser.add_argument(
 args = parser.parse_args()
 
 logger.info(f"Bot started")
-config = toml.load(args.config)
+
+with open(args.config, "rb") as f:
+    config = tomli.load(f)
 logger.info(f"Config loaded")
 
 log_level = logging.getLevelName(config["log_level"])

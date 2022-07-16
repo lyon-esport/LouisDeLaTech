@@ -30,7 +30,6 @@ include = [
 [tool.poetry.dependencies]
 python = "^3.8"
 "discord.py" = "^1.7.3"
-toml = "^0.10.2"
 Jinja2 = "^3.1.2"
 google-api-python-client = "^2.52.0"
 google-auth-httplib2 = "^0.1.0"
@@ -40,6 +39,7 @@ aiosqlite = "^0.17.0"
 cryptography = "^37.0.4"
 sentry-sdk = "^1.6.0"
 httpx = "^0.23.0"
+tomli = "^2.0.1"
 
 [tool.poetry.dev-dependencies]
 pre-commit = "^2.20.0"
