@@ -36,6 +36,8 @@ log_level = "DEBUG"
 [teams_to_skip]
     [teams_to_skip.alumnis]
         discord = "Alumnis"
+    [teams_to_skip.others]
+        discord = "others"
 
 [voice_channel_creation]
     trigger_channel_name = "Créer un salon vocal"

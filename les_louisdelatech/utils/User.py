@@ -6,7 +6,6 @@ class User:
         """
         :param user: User object from google API
         """
-        print(user)
         self.check_user_setup(user)
         self.firstname = user["name"]["givenName"]
         self.lastname = user["name"]["familyName"]
@@ -74,7 +73,7 @@ class User:
 
     @classmethod
     def email_from_name(cls, firstname, lastname):
-        return f"{firstname}.{lastname}@lyon-esport.fr"
+        return f"{firstname.lower()}.{lastname.lower()}@lyon-esport.fr"
 
     @classmethod
     def check_user_setup(cls, user):
