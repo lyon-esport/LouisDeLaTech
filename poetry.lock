@@ -194,7 +194,7 @@ grpc = ["grpcio (>=1.33.2,<2.0dev)", "grpcio-status (>=1.33.2,<2.0dev)"]
 
 [[package]]
 name = "google-api-python-client"
-version = "2.55.0"
+version = "2.56.0"
 description = "Google API Client Library for Python"
 category = "main"
 optional = false
@@ -632,19 +632,6 @@ python-versions = ">=3.6"
 
 [[package]]
 name = "urllib3"
-version = "1.26.9"
-description = "HTTP library with thread-safe connection pooling, file post, and more."
-category = "main"
-optional = false
-python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, <4"
-
-[package.extras]
-brotli = ["brotlicffi (>=0.8.0)", "brotli (>=1.0.9)", "brotlipy (>=0.6.0)"]
-secure = ["pyOpenSSL (>=0.14)", "cryptography (>=1.3.4)", "idna (>=2.0.0)", "certifi", "ipaddress"]
-socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
-
-[[package]]
-name = "urllib3"
 version = "1.26.11"
 description = "HTTP library with thread-safe connection pooling, file post, and more."
 category = "main"
@@ -874,8 +861,8 @@ google-api-core = [
     {file = "google_api_core-2.8.2-py3-none-any.whl", hash = "sha256:93c6a91ccac79079ac6bbf8b74ee75db970cc899278b97d53bc012f35908cf50"},
 ]
 google-api-python-client = [
-    {file = "google-api-python-client-2.55.0.tar.gz", hash = "sha256:1766c700eee14809ca1f7f52868c937755153289ea77ecdfd73dea6910e9a34d"},
-    {file = "google_api_python_client-2.55.0-py2.py3-none-any.whl", hash = "sha256:7837094c6d35cc8e680b60ebefe37f117ad521f3b263b0c7a6efa0b2f84cb17a"},
+    {file = "google-api-python-client-2.56.0.tar.gz", hash = "sha256:70d33203a4752bf4144b33fc689e997a2b5ed42c696d57149e4b3f5082682436"},
+    {file = "google_api_python_client-2.56.0-py2.py3-none-any.whl", hash = "sha256:ad321cea7aefc6385ac0b2e3e4fa7c9758ca37061efe0b410b4629fffba06601"},
 ]
 google-auth = [
     {file = "google-auth-2.9.0.tar.gz", hash = "sha256:3b2f9d2f436cc7c3b363d0ac66470f42fede249c3bafcc504e9f0bcbe983cff0"},
@@ -1182,8 +1169,6 @@ uritemplate = [
     {file = "uritemplate-4.1.1.tar.gz", hash = "sha256:4346edfc5c3b79f694bccd6d6099a322bbeb628dbf2cd86eea55a456ce5124f0"},
 ]
 urllib3 = [
-    {file = "urllib3-1.26.9-py2.py3-none-any.whl", hash = "sha256:44ece4d53fb1706f667c9bd1c648f5469a2ec925fcf3a776667042d645472c14"},
-    {file = "urllib3-1.26.9.tar.gz", hash = "sha256:aabaf16477806a5e1dd19aa41f8c2b7950dd3c746362d7e3223dbe6de6ac448e"},
     {file = "urllib3-1.26.11-py2.py3-none-any.whl", hash = "sha256:c33ccba33c819596124764c23a97d25f32b28433ba0dedeb77d873a38722c9bc"},
     {file = "urllib3-1.26.11.tar.gz", hash = "sha256:ea6e8fb210b19d950fab93b60c9009226c63a28808bc8386e05301e25883ac0a"},
 ]
