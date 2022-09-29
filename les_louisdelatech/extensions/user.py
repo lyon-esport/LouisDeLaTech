@@ -73,6 +73,7 @@ class UserCog(commands.Cog):
                 lastname,
                 user_email,
                 password,
+                self.bot.config["db"]["secret_key"],
                 role_name,
                 member.id,
                 pseudo,
@@ -404,7 +405,7 @@ class UserCog(commands.Cog):
         )
 
         try:
-            update_user_password(self.bot.admin_sdk(), user.email, temp_pass, True)
+            update_user_password(self.bot.admin_sdk(), user.email, temp_pass, self.bot.config["db"]["secret_key"], True)
         except HttpError as e:
             await ctx.send(format_google_api_error(e))
             raise
