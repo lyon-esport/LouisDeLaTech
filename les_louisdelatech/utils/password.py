@@ -1,6 +1,6 @@
+import crypt
 import secrets
 import string
-from hashlib import pbkdf2_hmac
 
 
 def generate_password():
@@ -11,7 +11,5 @@ def generate_password():
     return password
 
 
-def hash_password(password, salt):
-    our_app_iters = 500_000  # Application specific, read above.
-    dk = pbkdf2_hmac("sha512", password, salt, our_app_iters)
-    return dk.hex()
+def hash_password(password):
+    return crypt.crypt(password, crypt.METHOD_SHA512)

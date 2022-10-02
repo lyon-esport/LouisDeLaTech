@@ -3,8 +3,8 @@ from functools import wraps
 from http.client import responses
 
 from les_louisdelatech.utils.LouisDeLaTechError import LouisDeLaTechError
-from les_louisdelatech.utils.User import User
 from les_louisdelatech.utils.password import hash_password
+from les_louisdelatech.utils.User import User
 
 logger = logging.getLogger(__name__)
 
@@ -98,7 +98,7 @@ def search_user(admin_sdk, discord_pseudo, discord_id):
 
 
 def add_user(
-    admin_sdk, firstname, lastname, email, password, salt, group, discord_id, pseudo
+    admin_sdk, firstname, lastname, email, password, group, discord_id, pseudo
 ):
     body = {
         "name": {
@@ -114,7 +114,7 @@ def add_user(
             },
         },
         "organizations": [{"primary": True, "customType": "", "department": group}],
-        "password": hash_password(password, salt),
+        "password": hash_password(password),
         "hashFunction": "crypt",
         "changePasswordAtNextLogin": True,
     }
@@ -169,9 +169,9 @@ def update_user_department(admin_sdk, user_email, department):
     make_request(admin_sdk.users().update(userKey=user_email, body=body))
 
 
-def update_user_password(admin_sdk, user_email, password, salt, temporary_pass):
+def update_user_password(admin_sdk, user_email, password, temporary_pass):
     body = {
-        "password": hash_password(password, salt),
+        "password": hash_password(password),
         "hashFunction": "crypt",
         "changePasswordAtNextLogin": temporary_pass,
     }
