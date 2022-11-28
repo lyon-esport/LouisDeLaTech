@@ -5,7 +5,7 @@ from discord.ext import commands
 from les_louisdelatech.utils.discord import is_team_allowed
 
 
-class TaskCog(commands.Cog):
+class ManagementCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -52,7 +52,7 @@ class TaskCog(commands.Cog):
             # Create the channel and move member
             new_channel = await member.guild.create_voice_channel(
                 new_channel_name,
-                overwrites=None,
+                # overwrites=None,
                 category=after.channel.category,
                 bitrate=self.bot.config["voice_channel_creation"]["bitrate"],
             )
@@ -70,5 +70,5 @@ class TaskCog(commands.Cog):
             await before.channel.delete(reason="Channel is empty")
 
 
-def setup(bot):
-    bot.add_cog(TaskCog(bot))
+async def setup(bot):
+    await bot.add_cog(ManagementCog(bot))

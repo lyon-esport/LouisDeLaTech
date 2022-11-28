@@ -29,8 +29,8 @@ include = [
 ]
 
 [tool.poetry.dependencies]
-python = "^3.8"
-"discord.py" = "^1.7.3"
+python = "^3.10"
+"discord.py" = "^2.1.0"
 Jinja2 = "^3.1.2"
 google-api-python-client = "^2.52.0"
 google-auth-httplib2 = "^0.1.0"

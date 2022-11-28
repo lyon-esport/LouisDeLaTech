@@ -65,6 +65,9 @@ poetry shell
 pre-commit install
 ```
 
+When changing any libs version in pyproject.toml, do
+`poetry update`
+
 ### Run pre-commit
 ```
 pre-commit run --all-files
@@ -78,7 +81,7 @@ You can find all details here: <https://cecill.info/licences/Licence_CeCILL_V2.1
 
 ## Credits
 
-Copyright © Lyon e-Sport, 2021
+Copyright © Lyon e-Sport, 2022
 
 Contributor(s):
 

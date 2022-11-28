@@ -1,7 +1,7 @@
 from discord.ext import commands
 
 
-class TaskCog(commands.Cog):
+class ConfigCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -16,5 +16,5 @@ class TaskCog(commands.Cog):
         await ctx.send(message)
 
 
-def setup(bot):
-    bot.add_cog(TaskCog(bot))
+async def setup(bot):
+    await bot.add_cog(ConfigCog(bot))

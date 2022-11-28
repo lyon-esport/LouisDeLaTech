@@ -123,5 +123,5 @@ class OtpCog(commands.Cog):
         await ctx.send(f"Otp code {name} of team {user.team} deleted by {ctx.author}")
 
 
-def setup(bot):
-    bot.add_cog(OtpCog(bot))
+async def setup(bot):
+    await bot.add_cog(OtpCog(bot))

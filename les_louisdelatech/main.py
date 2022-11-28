@@ -1,3 +1,4 @@
+import asyncio
 import logging
 from argparse import ArgumentParser
 
@@ -48,9 +49,17 @@ if len(config["sentry_dsn"]) > 0:
     )
 
 bot = LouisDeLaTech(config, args.google)
-bot.loop.run_until_complete(bot.init_tortoise())
 
-for extension in config["discord"]["initial_cogs"]:
-    bot.load_extension(extension)
 
-bot.run(config["discord"]["token"], bot=True, reconnect=True)
+async def load_extensions():
+    for extension in config["discord"]["initial_cogs"]:
+        await bot.load_extension(extension)
+
+
+async def main():
+    async with bot:
+        await load_extensions()
+        await bot.start(config["discord"]["token"], reconnect=True)
+
+
+asyncio.run(main())

@@ -417,5 +417,5 @@ class UserCog(commands.Cog):
         await ctx.send(f"Sent a new password to {member.name} in PM")
 
 
-def setup(bot):
-    bot.add_cog(UserCog(bot))
+async def setup(bot):
+    await bot.add_cog(UserCog(bot))

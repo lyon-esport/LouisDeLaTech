@@ -1,3 +1,4 @@
+import asyncio
 import logging
 import os
 import sys
@@ -18,6 +19,7 @@ class LouisDeLaTech(commands.Bot):
         super().__init__(
             command_prefix=config["discord"]["command_prefix"],
             description="LouisDeLaTech is a discord bot manager for Lyon e-Sport",
+            intents=discord.Intents.all(),
         )
 
         self.root_dir = os.path.dirname(os.path.abspath(__file__))
@@ -33,7 +35,7 @@ class LouisDeLaTech(commands.Bot):
     def decrypt(self, s):
         return self.fernet.decrypt(s).decode("ascii")
 
-    async def init_tortoise(self):
+    async def setup_hook(self):
         await Tortoise.init(
             db_url=f"sqlite://{self.config['db']['filename']}",
             modules={"models": ["les_louisdelatech.models"]},
