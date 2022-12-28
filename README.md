@@ -65,9 +65,6 @@ poetry shell
 pre-commit install
 ```
 
-When changing any libs version in pyproject.toml, do
-`poetry update`
-
 ### Run pre-commit
 ```
 pre-commit run --all-files
