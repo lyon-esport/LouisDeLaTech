@@ -19,7 +19,13 @@ class LouisDeLaTech(commands.Bot):
         super().__init__(
             command_prefix=config["discord"]["command_prefix"],
             description="LouisDeLaTech is a discord bot manager for Lyon e-Sport",
-            intents=discord.Intents.all(),
+            intents=discord.Intents(
+                messages=True,
+                message_content=True,
+                guilds=True,
+                voice_states=True,
+                members=True,
+            ),
         )
 
         self.root_dir = os.path.dirname(os.path.abspath(__file__))
