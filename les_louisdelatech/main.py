@@ -50,16 +50,4 @@ if len(config["sentry_dsn"]) > 0:
 
 bot = LouisDeLaTech(config, args.google)
 
-
-async def load_extensions():
-    for extension in config["discord"]["initial_cogs"]:
-        await bot.load_extension(extension)
-
-
-async def main():
-    async with bot:
-        await load_extensions()
-        await bot.start(config["discord"]["token"], reconnect=True)
-
-
-asyncio.run(main())
+bot.run(config["discord"]["token"], reconnect=True)

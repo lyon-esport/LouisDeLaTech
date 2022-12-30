@@ -42,6 +42,8 @@ class LouisDeLaTech(commands.Bot):
         return self.fernet.decrypt(s).decode("ascii")
 
     async def setup_hook(self):
+        for extension in self.config["discord"]["initial_cogs"]:
+            await self.load_extension(extension)
         await Tortoise.init(
             db_url=f"sqlite://{self.config['db']['filename']}",
             modules={"models": ["les_louisdelatech.models"]},
