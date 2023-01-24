@@ -57,7 +57,7 @@ python3 -m les_louisdelatech.main -c config.toml -g google.json
 
 # Dev
 
-Install [Poetry](https://python-poetry.org/docs/master/#installing-with-the-official-installer) with version >= 1.2.0a1
+Install [Poetry](https://python-poetry.org/docs/master/#installing-with-the-official-installer)
 
 ```bash
 poetry install
