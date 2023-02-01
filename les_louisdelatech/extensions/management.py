@@ -1,5 +1,3 @@
-from itertools import count
-
 from discord.ext import commands
 
 from les_louisdelatech.utils.discord import is_team_allowed
@@ -43,7 +41,7 @@ class TaskCog(commands.Cog):
             while new_channel_name is None:
                 channel_name_check = f'{self.bot.config["voice_channel_creation"]["new_channel_name"]} #{channel_number}'
                 if (
-                    not channel_name_check in list_channels_name
+                    channel_name_check not in list_channels_name
                     or not list_channels_name
                 ):
                     new_channel_name = channel_name_check

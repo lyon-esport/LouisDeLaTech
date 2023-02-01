@@ -28,11 +28,11 @@ parser.add_argument(
 )
 args = parser.parse_args()
 
-logger.info(f"Bot started")
+logger.info("Bot started")
 
 with open(args.config, "rb") as f:
     config = tomli.load(f)
-logger.info(f"Config loaded")
+logger.info("Config loaded")
 
 log_level = logging.getLevelName(config["log_level"])
 logger.setLevel(log_level)
