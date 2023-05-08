@@ -10,7 +10,7 @@ from google.oauth2.service_account import Credentials
 from googleapiclient import discovery
 from tortoise import Tortoise, connections
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger()
 
 
 class LouisDeLaTech(commands.Bot):
@@ -18,7 +18,16 @@ class LouisDeLaTech(commands.Bot):
         super().__init__(
             command_prefix=config["discord"]["command_prefix"],
             description="LouisDeLaTech is a discord bot manager for Lyon e-Sport",
+            intents=discord.Intents(
+                messages=True,
+                message_content=True,
+                guilds=True,
+                voice_states=True,
+                members=True,
+            ),
         )
+        # added to make sure that the command tree will be synced only once
+        self.synced = False
 
         self.root_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -33,7 +42,10 @@ class LouisDeLaTech(commands.Bot):
     def decrypt(self, s):
         return self.fernet.decrypt(s).decode("ascii")
 
-    async def init_tortoise(self):
+    async def setup_hook(self):
+        for extension in self.config["discord"]["initial_cogs"]:
+            await self.load_extension(extension)
+
         await Tortoise.init(
             db_url=f"sqlite://{self.config['db']['filename']}",
             modules={"models": ["les_louisdelatech.models"]},
@@ -63,15 +75,20 @@ class LouisDeLaTech(commands.Bot):
     async def on_ready(self):
         logger.info(f"Logged in as: {self.user.name} - {self.user.id}")
         logger.info("Successfully logged in and booted...!")
+        if not self.synced:  # check if slash commands have been synced
+            await self.tree.sync()
+            logger.info("Slash commands synced")
 
     async def on_command_error(self, ctx, error):
         if isinstance(error, discord.ext.commands.errors.CommandNotFound):
             await ctx.send("Command not found")
+        elif isinstance(ctx, discord.Interaction):
+            await ctx.response.send_message(f"Error while executing command => {error.__cause__}")
         else:
             await ctx.send(f"Error while executing command => {error.__cause__}")
-            traceback.print_exception(
-                type(error), error, error.__traceback__, file=sys.stderr
-            )
+        traceback.print_exception(
+            type(error), error, error.__traceback__, file=sys.stderr
+        )
 
     async def close(self):
         await connections.close_all()

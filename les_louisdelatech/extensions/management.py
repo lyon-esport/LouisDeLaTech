@@ -3,13 +3,17 @@ from discord.ext import commands
 from les_louisdelatech.utils.discord import is_team_allowed
 
 
-class TaskCog(commands.Cog):
+class ManagementCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(help="Change channel topic")
+    @commands.hybrid_command(help="Change channel topic")
     @is_team_allowed
-    async def topic(self, ctx, description):
+    async def topic(
+        self,
+        ctx,
+        description: str = commands.parameter(description="Topic description"),
+    ):
         await ctx.channel.edit(topic=description)
         await ctx.send("Channel topic updated")
 
@@ -20,7 +24,9 @@ class TaskCog(commands.Cog):
         if (
             after.channel
             and after.channel.name
-            == self.bot.config["voice_channel_creation"]["trigger_channel_name"]
+            == self.bot.config["discord"]["voice_channel_creation"][
+                "trigger_channel_name"
+            ]
             and not member.bot
         ):
             # List meeting channels already existing in the user's category and order it
@@ -28,7 +34,9 @@ class TaskCog(commands.Cog):
 
             def predicate(channel):
                 return channel.name.startswith(
-                    self.bot.config["voice_channel_creation"]["new_channel_name"]
+                    self.bot.config["discord"]["voice_channel_creation"][
+                        "new_channel_name"
+                    ]
                 )
 
             for channel in filter(predicate, after.channel.category.voice_channels):
@@ -39,7 +47,7 @@ class TaskCog(commands.Cog):
             channel_number = 1
 
             while new_channel_name is None:
-                channel_name_check = f'{self.bot.config["voice_channel_creation"]["new_channel_name"]} #{channel_number}'
+                channel_name_check = f'{self.bot.config["discord"]["voice_channel_creation"]["new_channel_name"]} #{channel_number}'
                 if (
                     channel_name_check not in list_channels_name
                     or not list_channels_name
@@ -50,7 +58,6 @@ class TaskCog(commands.Cog):
             # Create the channel and move member
             new_channel = await member.guild.create_voice_channel(
                 new_channel_name,
-                overwrites=None,
                 category=after.channel.category,
                 bitrate=self.bot.config["voice_channel_creation"]["bitrate"],
             )
@@ -60,7 +67,7 @@ class TaskCog(commands.Cog):
         if (
             before.channel
             and before.channel.name.startswith(
-                self.bot.config["voice_channel_creation"]["new_channel_name"]
+                self.bot.config["discord"]["voice_channel_creation"]["new_channel_name"]
             )
             and not member.bot
             and not before.channel.members
@@ -68,5 +75,5 @@ class TaskCog(commands.Cog):
             await before.channel.delete(reason="Channel is empty")
 
 
-def setup(bot):
-    bot.add_cog(TaskCog(bot))
+async def setup(bot):
+    await bot.add_cog(ManagementCog(bot))

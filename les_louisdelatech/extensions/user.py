@@ -28,15 +28,21 @@ from les_louisdelatech.utils.LouisDeLaTechError import LouisDeLaTechError
 from les_louisdelatech.utils.password import generate_password
 from les_louisdelatech.utils.User import User
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger()
 
 
 class UserCog(commands.Cog):
-    @commands.command(help="Provision an user")
+    @commands.hybrid_command(help="Provision an user")
     @commands.guild_only()
     @is_gsuite_admin
     async def provision(
-        self, ctx, member: discord.Member, firstname, lastname, pseudo, role_name
+        self,
+        ctx,
+        member: discord.Member = commands.parameter(description="Discord user"),
+        firstname: str = commands.parameter(description="User firstname"),
+        lastname: str = commands.parameter(description="User lastname"),
+        pseudo: str = commands.parameter(description="User pseudo"),
+        role_name: str = commands.parameter(description="User role"),
     ):
         """
         Provision an user
@@ -145,10 +151,14 @@ class UserCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(help="Deprovision an user")
+    @commands.hybrid_command(help="Deprovision an user")
     @commands.guild_only()
     @is_gsuite_admin
-    async def deprovision(self, ctx, member: discord.Member):
+    async def deprovision(
+        self,
+        ctx,
+        member: discord.Member = commands.parameter(description="Discord user"),
+    ):
         """
         [Discord]
             => User will be removed from all groups
@@ -177,10 +187,15 @@ class UserCog(commands.Cog):
 
         await ctx.send(f"User {member.name} deprovisionned")
 
-    @commands.command(name="uteam", help="Update user team")
+    @commands.hybrid_command(name="uteam", help="Update user team")
     @commands.guild_only()
     @is_gsuite_admin
-    async def update_team(self, ctx, member: discord.Member, new_team_name):
+    async def update_team(
+        self,
+        ctx,
+        member: discord.Member = commands.parameter(description="Discord user"),
+        new_team_name: str = commands.parameter(description="New team name"),
+    ):
         """
         [Discord]
             => User will be removed from all team groups
@@ -262,10 +277,15 @@ class UserCog(commands.Cog):
 
         await ctx.send(f"User {member.name} is now member of team: {user.team}")
 
-    @commands.command(name="upseudo", help="Update user pseudo")
+    @commands.hybrid_command(name="upseudo", help="Update user pseudo")
     @commands.guild_only()
     @is_gsuite_admin
-    async def update_pseudo(self, ctx, member: discord.Member, new_pseudo):
+    async def update_pseudo(
+        self,
+        ctx,
+        member: discord.Member = commands.parameter(description="Discord user"),
+        new_pseudo: str = commands.parameter(description="New user pseudo"),
+    ):
         """
         [Discord]
             => User will be renamed
@@ -303,7 +323,7 @@ class UserCog(commands.Cog):
 
         await ctx.send(f"User {old_nick} you now shall be called {member.nick} !")
 
-    @commands.command(
+    @commands.hybrid_command(
         name="usignatures", help="Update the signature of all users on gmail"
     )
     @commands.guild_only()
@@ -353,10 +373,15 @@ class UserCog(commands.Cog):
 
         await ctx.send(f"Updated signatures for {user_updated}/{len(users)} users")
 
-    @commands.command(help="Update recovery email of an user")
+    @commands.hybrid_command(help="Update recovery email of an user")
     @commands.guild_only()
     @is_gsuite_admin
-    async def urecovery(self, ctx, member: discord.Member, backup_email):
+    async def urecovery(
+        self,
+        ctx,
+        member: discord.Member = commands.parameter(description="Discord user"),
+        backup_email: str = commands.parameter(description="User backup email"),
+    ):
         try:
             user = User(search_user(self.bot.admin_sdk(), member.name, member.id))
             is_user_managed(
@@ -376,10 +401,14 @@ class UserCog(commands.Cog):
 
         await ctx.send(f"Updated recovery information for user {member.name}")
 
-    @commands.command(help="Reset password of an user")
+    @commands.hybrid_command(help="Reset password of an user")
     @commands.guild_only()
     @is_gsuite_admin
-    async def rpassword(self, ctx, member: discord.Member):
+    async def rpassword(
+        self,
+        ctx,
+        member: discord.Member = commands.parameter(description="Discord user"),
+    ):
         try:
             user = User(search_user(self.bot.admin_sdk(), member.name, member.id))
             is_user_managed(
@@ -417,5 +446,5 @@ class UserCog(commands.Cog):
         await ctx.send(f"Sent a new password to {member.name} in PM")
 
 
-def setup(bot):
-    bot.add_cog(UserCog(bot))
+async def setup(bot):
+    await bot.add_cog(UserCog(bot))

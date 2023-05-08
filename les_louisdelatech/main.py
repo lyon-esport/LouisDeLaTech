@@ -7,7 +7,7 @@ import tomli
 from les_louisdelatech.bot import LouisDeLaTech
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s:%(message)s")
-logger = logging.getLogger(__name__)
+logger = logging.getLogger()
 
 parser = ArgumentParser()
 parser.add_argument(
@@ -48,9 +48,5 @@ if len(config["sentry_dsn"]) > 0:
     )
 
 bot = LouisDeLaTech(config, args.google)
-bot.loop.run_until_complete(bot.init_tortoise())
 
-for extension in config["discord"]["initial_cogs"]:
-    bot.load_extension(extension)
-
-bot.run(config["discord"]["token"], bot=True, reconnect=True)
+bot.run(config["discord"]["token"], reconnect=True)

@@ -39,11 +39,6 @@ log_level = "DEBUG"
     [teams_to_skip.others]
         discord = "others"
 
-[voice_channel_creation]
-    trigger_channel_name = "Créer un salon vocal"
-    new_channel_name = "🤝 Réunion"
-    bitrate = 96000
-
 [discord]
     token = ""
     initial_cogs = [
@@ -69,6 +64,10 @@ log_level = "DEBUG"
             "_Spectacle & streaming",
             "_Logistique",
         ]
+    [voice_channel_creation]
+        trigger_channel_name = "Créer un salon vocal"
+        new_channel_name = "🤝 Réunion"
+        bitrate = 96000
 
 [google]
     subject = ""

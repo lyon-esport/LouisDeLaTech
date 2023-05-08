@@ -5,14 +5,14 @@ import httpx
 from discord.ext import commands
 from discord.ext.commands import Context
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger()
 
 
 class CatCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name="cat", help="Get cat")
+    @commands.hybrid_command(name="cat", help="Get cat")
     async def get_cat(self, ctx: Context):
         async with httpx.AsyncClient() as client:
             cat_data = await client.get("https://api.thecatapi.com/v1/images/search")
@@ -28,5 +28,5 @@ class CatCog(commands.Cog):
         await ctx.send(embed=embed)
 
 
-def setup(bot):
-    bot.add_cog(CatCog(bot))
+async def setup(bot):
+    await bot.add_cog(CatCog(bot))
