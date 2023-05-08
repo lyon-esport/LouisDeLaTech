@@ -83,7 +83,9 @@ class LouisDeLaTech(commands.Bot):
         if isinstance(error, discord.ext.commands.errors.CommandNotFound):
             await ctx.send("Command not found")
         elif isinstance(ctx, discord.Interaction):
-            await ctx.response.send_message(f"Error while executing command => {error.__cause__}")
+            await ctx.response.send_message(
+                f"Error while executing command => {error.__cause__}"
+            )
         else:
             await ctx.send(f"Error while executing command => {error.__cause__}")
         traceback.print_exception(
