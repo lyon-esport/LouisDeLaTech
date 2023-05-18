@@ -59,7 +59,7 @@ class ManagementCog(commands.Cog):
             new_channel = await member.guild.create_voice_channel(
                 new_channel_name,
                 category=after.channel.category,
-                bitrate=self.bot.config["voice_channel_creation"]["bitrate"],
+                bitrate=self.bot.config["discord"]["voice_channel_creation"]["bitrate"],
             )
             await member.move_to(new_channel)
 
