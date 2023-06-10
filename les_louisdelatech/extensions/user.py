@@ -52,6 +52,7 @@ class UserCog(commands.Cog):
         [Google]
             => User will be created and added to team group
         """
+        await ctx.defer()
         user_email = User.email_from_name(firstname, lastname)
         user_team = self.bot.config["teams"].get(role_name, None)
         password = generate_password()
@@ -165,6 +166,7 @@ class UserCog(commands.Cog):
         [Google]
             => User will be suspended
         """
+        await ctx.defer()
         try:
             user = User(search_user(self.bot.admin_sdk(), member.name, member.id))
             is_user_managed(
@@ -205,6 +207,7 @@ class UserCog(commands.Cog):
             => User will be added to this new team
             => User signature will be updated
         """
+        await ctx.defer()
         try:
             user = User(search_user(self.bot.admin_sdk(), member.name, member.id))
             is_user_managed(
@@ -292,6 +295,7 @@ class UserCog(commands.Cog):
         [Google]
             => User pseudo will be renamed
         """
+        await ctx.defer()
         try:
             user = User(search_user(self.bot.admin_sdk(), member.name, member.id))
             is_user_managed(
@@ -329,6 +333,7 @@ class UserCog(commands.Cog):
     @commands.guild_only()
     @is_gsuite_admin
     async def update_signatures(self, ctx):
+        await ctx.defer()
         user_updated = 0
         try:
             users = get_users(self.bot.admin_sdk())
@@ -382,6 +387,7 @@ class UserCog(commands.Cog):
         member: discord.Member = commands.parameter(description="Discord user"),
         backup_email: str = commands.parameter(description="User backup email"),
     ):
+        await ctx.defer()
         try:
             user = User(search_user(self.bot.admin_sdk(), member.name, member.id))
             is_user_managed(
@@ -409,6 +415,7 @@ class UserCog(commands.Cog):
         ctx,
         member: discord.Member = commands.parameter(description="Discord user"),
     ):
+        await ctx.defer()
         try:
             user = User(search_user(self.bot.admin_sdk(), member.name, member.id))
             is_user_managed(

@@ -14,6 +14,7 @@ class ManagementCog(commands.Cog):
         ctx,
         description: str = commands.parameter(description="Topic description"),
     ):
+        await ctx.defer()
         await ctx.channel.edit(topic=description)
         await ctx.send("Channel topic updated")
 

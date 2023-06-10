@@ -7,6 +7,7 @@ class ConfigCog(commands.Cog):
 
     @commands.hybrid_command(name="gteams", help="Get available teams")
     async def get_teams(self, ctx):
+        await ctx.defer()
         message = "Available roles :\n```"
 
         for team in self.bot.config["teams"]:

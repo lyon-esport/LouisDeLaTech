@@ -21,6 +21,7 @@ class OtpCog(commands.Cog):
     @commands.guild_only()
     @is_team_allowed
     async def list_otp(self, ctx):
+        await ctx.defer()
         try:
             user = User(
                 search_user(self.bot.admin_sdk(), ctx.author.name, ctx.author.id)
@@ -50,6 +51,7 @@ class OtpCog(commands.Cog):
     async def get_otp(
         self, ctx, name: str = commands.parameter(description="Otp name")
     ):
+        await ctx.defer()
         try:
             user = User(
                 search_user(self.bot.admin_sdk(), ctx.author.name, ctx.author.id)
@@ -87,6 +89,7 @@ class OtpCog(commands.Cog):
         digits: str = commands.parameter(description="Otp digits"),
         secret: str = commands.parameter(description="Otp secret"),
     ):
+        await ctx.defer()
         await ctx.message.delete()
 
         try:
@@ -117,6 +120,7 @@ class OtpCog(commands.Cog):
     async def delete_otp(
         self, ctx, name: str = commands.parameter(description="Otp name")
     ):
+        await ctx.defer()
         try:
             user = User(
                 search_user(self.bot.admin_sdk(), ctx.author.name, ctx.author.id)
