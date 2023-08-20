@@ -14,7 +14,7 @@ class HelloAssoCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.hybrid_command(name="ha_check_update", help="Create/Update users")
+    @commands.hybrid_command(name="ha_check_update", help="Check users")
     @commands.guild_only()
     @is_gsuite_admin
     async def ha_check_update(
