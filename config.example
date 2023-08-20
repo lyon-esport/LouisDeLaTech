@@ -33,11 +33,13 @@ log_level = "DEBUG"
         message_template = "logistique.j2"
         team_role = true
 
-[teams_to_skip]
-    [teams_to_skip.alumnis]
-        discord = "Alumnis"
-    [teams_to_skip.others]
-        discord = "others"
+[to_skip]
+    [[to_skip.teams]]
+    discord = "Alumnis"
+    google = "alumnis"
+    [[to_skip.teams]]
+    discord = "others"
+    google = "others"
 
 [discord]
     token = ""
@@ -47,6 +49,7 @@ log_level = "DEBUG"
         "les_louisdelatech.extensions.management",
         "les_louisdelatech.extensions.otp",
         "les_louisdelatech.extensions.user",
+        "les_louisdelatech.extensions.hello_asso",
         "les_louisdelatech.extensions.cats",
     ]
     command_prefix = "!"
@@ -80,6 +83,11 @@ log_level = "DEBUG"
             "https://www.googleapis.com/auth/gmail.settings.basic",
             "https://www.googleapis.com/auth/gmail.settings.sharing",
         ]
+
+[hello_asso]
+organization = ""
+client_id = ""
+client_secret = ""
 
 [db]
 filename = "db.sqlite3"

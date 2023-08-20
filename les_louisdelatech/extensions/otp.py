@@ -23,7 +23,7 @@ class OtpCog(commands.Cog):
     async def list_otp(self, ctx):
         await ctx.defer()
         try:
-            user = User(
+            user = User.from_google(
                 search_user(self.bot.admin_sdk(), ctx.author.name, ctx.author.id)
             )
         except LouisDeLaTechError as e:
@@ -53,7 +53,7 @@ class OtpCog(commands.Cog):
     ):
         await ctx.defer()
         try:
-            user = User(
+            user = User.from_google(
                 search_user(self.bot.admin_sdk(), ctx.author.name, ctx.author.id)
             )
         except LouisDeLaTechError as e:
@@ -75,7 +75,7 @@ class OtpCog(commands.Cog):
 
         logger.info(f"Otp code {name} of team {user.team} send in DM to {ctx.author}")
         await ctx.send(
-            f"Otp code {name} of team {user.team} send in DM to {ctx.author}"
+            f":white_check_mark: Otp code {name} of team {user.team} send in DM to {ctx.author}"
         )
 
     @commands.hybrid_command(name="cotp", help="Create otp code")
@@ -93,7 +93,7 @@ class OtpCog(commands.Cog):
         await ctx.message.delete()
 
         try:
-            user = User(
+            user = User.from_google(
                 search_user(self.bot.admin_sdk(), ctx.author.name, ctx.author.id)
             )
         except LouisDeLaTechError as e:
@@ -112,7 +112,9 @@ class OtpCog(commands.Cog):
         )
 
         logger.info(f"Otp code {name} of team {user.team} created by {ctx.author}")
-        await ctx.send(f"Otp code {name} of team {user.team} created by {ctx.author}")
+        await ctx.send(
+            f":white_check_mark: Otp code {name} of team {user.team} created by {ctx.author}"
+        )
 
     @commands.hybrid_command(name="dotp", help="Delete otp code")
     @commands.guild_only()
@@ -122,7 +124,7 @@ class OtpCog(commands.Cog):
     ):
         await ctx.defer()
         try:
-            user = User(
+            user = User.from_google(
                 search_user(self.bot.admin_sdk(), ctx.author.name, ctx.author.id)
             )
         except LouisDeLaTechError as e:
@@ -135,7 +137,9 @@ class OtpCog(commands.Cog):
         await Otp.filter(name=name, team=user.team).delete()
 
         logger.info(f"Otp code {name} of team {user.team} deleted by {ctx.author}")
-        await ctx.send(f"Otp code {name} of team {user.team} deleted by {ctx.author}")
+        await ctx.send(
+            f":white_check_mark: Otp code {name} of team {user.team} deleted by {ctx.author}"
+        )
 
 
 async def setup(bot):

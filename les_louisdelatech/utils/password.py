@@ -11,5 +11,5 @@ def generate_password():
     return password
 
 
-def hash_password(password):
+def hash_password(password: str):
     return crypt.crypt(password, crypt.METHOD_SHA512)

@@ -8,6 +8,9 @@ from cryptography.fernet import Fernet
 from discord.ext import commands
 from google.oauth2.service_account import Credentials
 from googleapiclient import discovery
+from oauthlib.oauth2 import BackendApplicationClient
+from requests.auth import HTTPBasicAuth
+from requests_oauthlib import OAuth2Session
 from tortoise import Tortoise, connections
 
 logger = logging.getLogger()
@@ -36,10 +39,51 @@ class LouisDeLaTech(commands.Bot):
 
         self.fernet = Fernet(self.config["db"]["secret_key"])
 
-    def encrypt(self, s):
+        self.hello_asso = self.setup_hello_asso_client()
+        self._hello_asso_fetch_token()
+
+    def setup_hello_asso_client(self):
+        client = BackendApplicationClient(
+            client_id=self.config["hello_asso"]["client_id"]
+        )
+        oauth = OAuth2Session(
+            client=client,
+            auto_refresh_url="https://api.helloasso.com/oauth2/token",
+            auto_refresh_kwargs={
+                "client_id": self.config["hello_asso"]["client_id"],
+                "client_secret": self.config["hello_asso"]["client_secret"],
+            },
+            token_updater=self._hello_asso_token_saver,
+        )
+
+        return oauth
+
+    def _hello_asso_fetch_token(self):
+        result = self.hello_asso.fetch_token(
+            token_url=self.hello_asso.auto_refresh_url,
+            auth=HTTPBasicAuth(
+                self.config["hello_asso"]["client_id"],
+                self.config["hello_asso"]["client_secret"],
+            ),
+        )
+        self._hello_asso_token_saver(result)
+
+    def _hello_asso_token_saver(self, token: str):
+        self.hello_asso.headers = {"authorization": f"Bearer {token}"}
+
+    def get_entity_to_skip(self, entity: str, provider: str):
+        teams = []
+
+        for entity in self.config["to_skip"][entity]:
+            if provider in entity:
+                teams.append(entity[provider])
+
+        return teams
+
+    def encrypt(self, s: str):
         return self.fernet.encrypt(s.encode("ascii"))
 
-    def decrypt(self, s):
+    def decrypt(self, s: str):
         return self.fernet.decrypt(s).decode("ascii")
 
     async def setup_hook(self):
@@ -63,7 +107,7 @@ class LouisDeLaTech(commands.Bot):
             "admin", "directory_v1", credentials=creds, cache_discovery=False
         )
 
-    def gmail_sdk(self, user):
+    def gmail_sdk(self, user: str):
         creds = Credentials.from_service_account_file(
             self.google_path,
             scopes=self.config["google"]["scopes"]["gmail"],
@@ -79,15 +123,17 @@ class LouisDeLaTech(commands.Bot):
             await self.tree.sync()
             logger.info("Slash commands synced")
 
-    async def on_command_error(self, ctx, error):
+    async def on_command_error(self, ctx, error: Exception):
         if isinstance(error, discord.ext.commands.errors.CommandNotFound):
             await ctx.send("Command not found")
         elif isinstance(ctx, discord.Interaction):
             await ctx.response.send_message(
-                f"Error while executing command => {error.__cause__}"
+                f":no_entry: Error while executing command => {error.__cause__}"
             )
         else:
-            await ctx.send(f"Error while executing command => {error.__cause__}")
+            await ctx.send(
+                f":no_entry: Error while executing command => {error.__cause__}"
+            )
         traceback.print_exception(
             type(error), error, error.__traceback__, file=sys.stderr
         )

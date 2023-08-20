@@ -26,9 +26,46 @@ Create a [discord bot](https://discord.com/developers/applications) and get the 
 You must create [user custom attribute](https://admin.google.com/ac/customschema?hl=fr)
 
 ```json
-custom: {
- pseudo: ""
- discordId: ""
+"custom": {
+ "pseudo": "",
+ "discordId": "",
+ "teeShirt": "",
+ "birthdate": ""
+}
+```
+
+### Hello asso
+[Documentation](https://centredaide.helloasso.com/s/article/api-comment-fonctionne-l-api-helloasso)
+
+Custom fields
+```json
+{
+    "name": "Pseudonyme",
+    "type": "TextInput",
+},
+{
+    "name": "Date de naissance",
+    "type": "Date",
+},
+{
+    "name": "Adresse postale",
+    "type": "TextInput",
+},
+{
+    "name": "Numéro de téléphone",
+    "type": "TextInput",
+},
+{
+    "name": "Nom d'utilisateur Discord",
+    "type": "TextInput",
+},
+{
+    "name": "Taille du tee-shirt",
+    "type": "ChoiceList",
+},
+{
+    "name": "Je m'engage à signer l'engagement de confidentialité : https://example.fr",
+    "type": "YesNo",
 }
 ```
 

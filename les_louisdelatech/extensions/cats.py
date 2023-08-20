@@ -1,11 +1,7 @@
-import logging
-
 import discord
 import httpx
 from discord.ext import commands
 from discord.ext.commands import Context
-
-logger = logging.getLogger()
 
 
 class CatCog(commands.Cog):
