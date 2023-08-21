@@ -13,7 +13,7 @@
 						<tr width="342px" height="25px">
 							<p style="font-family: Helvetica, sans-serif; font-size: 12px; line-height: 14px; color:#333; margin-top: 0px;" id="sigCompanyWrapper">
 								<strong><span id="sigName" style="color:rgb(255, 0, 0);">{{ firstname|title }} {{ lastname|upper }}</span></strong>
-								{% if position is not none %}<br><span id="sigTitle">{{ position }}</span>{% endif %}
+								{% if position is not none %}<br><span id="sigTitle">{{ position|capitalize }}</span>{% endif %}
 								{% if team is not none %}<br><span id="sigTeam">Equipe {{ team }}</span>{% endif %}
 								<br><strong><span id="sigCompany">Association Lyon e-Sport</span></strong>
 							</p>

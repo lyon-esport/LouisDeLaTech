@@ -140,7 +140,7 @@ def update_user_signature(gmail_sdk: Resource, template, user: User, team_role: 
                         "firstname": user.firstname,
                         "lastname": user.lastname,
                         "position": user.position,
-                        "team": team_role if team_role else None,
+                        "team": user.team if team_role else None,
                     }
                 )
             },
