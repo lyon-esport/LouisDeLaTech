@@ -62,7 +62,7 @@ class HelloAssoCog(commands.Cog):
                     user_diff = user.attr_differ(current_user)
                     if len(user_diff) > 0:
                         await ctx.send(
-                            f":arrows_counterclockwise: Update user : {user.firstname} {user.lastname} [{', '.join(user_diff)}] need an update"
+                            f":arrows_counterclockwise: Update user : {user.firstname} {user.lastname} [{', '.join(user_diff)}] needs an update"
                         )
                         updated_user_count += 1
                     break
