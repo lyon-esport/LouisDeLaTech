@@ -48,7 +48,7 @@ class User:
         return f"{self.firstname} {self.lastname}"
 
     def __eq__(self, other: Self):
-        return self.firstname == other.firstname and self.lastname == other.lastname
+        return self.email_from_name() == other.email_from_name()
 
     def __hash__(self):
         return hash((self.firstname, self.lastname))
@@ -264,7 +264,7 @@ class User:
         return f"{firstname} {pseudo} {lastname[:1].upper()}"
 
     def email_from_name(self):
-        firstname = unidecode(self.firstname).lower().replace(" ", "")
-        lastname = unidecode(self.lastname).lower().replace(" ", "")
+        firstname = unidecode(self.firstname).lower().replace(" ", "").replace("-", "")
+        lastname = unidecode(self.lastname).lower().replace(" ", "").replace("-", "")
 
         return f"{firstname}.{lastname}@lyon-esport.fr"
