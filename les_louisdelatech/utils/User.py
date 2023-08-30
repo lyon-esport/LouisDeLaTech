@@ -54,11 +54,11 @@ class User:
         return hash((self.firstname, self.lastname))
 
     def attr_differ(
-        self, other: Self, attr_to_ignore: List[str] = ["discord_id", "is_admin"]
+        self, other: Self, attr_to_ignore: List[str] = ["_team", "_position", "discord_id", "is_admin"]
     ):
         diffs = []
         for key in filter(
-            lambda x: x not in attr_to_ignore and not x.startswith("_"),
+            lambda x: x not in attr_to_ignore,
             self.__dict__.keys(),
         ):
             if getattr(self, key) != getattr(other, key):
@@ -93,8 +93,6 @@ class User:
                         item["address"] = custom_field["answer"]
                     elif "Numéro de téléphone" == custom_field["name"]:
                         item["phone"] = custom_field["answer"]
-                    elif "Nom d'utilisateur Discord" in custom_field["name"]:
-                        item["pseudo"] = custom_field["answer"]
                     elif "Taille du tee-shirt" == custom_field["name"]:
                         item["tee_shirt"] = custom_field["answer"]
                     elif (
@@ -181,7 +179,7 @@ class User:
         return cls(
             user["name"]["givenName"],
             user["name"]["familyName"],
-            datetime.fromisoformat(user["customSchemas"]["custom"]["birthdate"])
+            datetime.strptime(user["customSchemas"]["custom"]["birthdate"], "%d/%m/%Y").replace(tzinfo=timezone.utc)
             if "birthdate" in user["customSchemas"]["custom"]
             else None,
             user["customSchemas"]["custom"]["pseudo"]
