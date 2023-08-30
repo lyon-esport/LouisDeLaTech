@@ -53,10 +53,10 @@ class User:
     def __hash__(self):
         return hash((self.firstname, self.lastname))
 
-    def attr_differ(self, other: Self, attr_to_ignore: List[str] = []):
+    def attr_differ(self, other: Self, attr_to_ignore: List[str] = ["discord_id", "is_admin"]):
         diffs = []
-        for key in filter(lambda x: x not in self.__dict__.keys(), attr_to_ignore):
-            if self[key] != other[key]:
+        for key in filter(lambda x: x not in attr_to_ignore and not x.startswith("_"), self.__dict__.keys()):
+            if getattr(self, key) != getattr(other, key):
                 diffs.append(key)
         return diffs
 
