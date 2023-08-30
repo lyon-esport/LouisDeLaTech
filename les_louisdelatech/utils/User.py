@@ -54,7 +54,9 @@ class User:
         return hash((self.firstname, self.lastname))
 
     def attr_differ(
-        self, other: Self, attr_to_ignore: List[str] = ["_team", "_position", "discord_id", "is_admin"]
+        self,
+        other: Self,
+        attr_to_ignore: List[str] = ["_team", "_position", "discord_id", "is_admin"],
     ):
         diffs = []
         for key in filter(
@@ -179,7 +181,9 @@ class User:
         return cls(
             user["name"]["givenName"],
             user["name"]["familyName"],
-            datetime.strptime(user["customSchemas"]["custom"]["birthdate"], "%d/%m/%Y").replace(tzinfo=timezone.utc)
+            datetime.strptime(
+                user["customSchemas"]["custom"]["birthdate"], "%d/%m/%Y"
+            ).replace(tzinfo=timezone.utc)
             if "birthdate" in user["customSchemas"]["custom"]
             else None,
             user["customSchemas"]["custom"]["pseudo"]
