@@ -99,12 +99,12 @@ Install [Poetry](https://python-poetry.org/docs/master/#installing-with-the-offi
 ```bash
 poetry install
 poetry shell
-pre-commit install
 ```
 
-### Run pre-commit
+### Run ruff
 ```
-pre-commit run --all-files
+poetry run ruff format --check . 
+poetry run ruff check .
 ```
 
 ## Licence
