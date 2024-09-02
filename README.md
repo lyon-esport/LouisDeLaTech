@@ -7,7 +7,7 @@
 
 ## Requirements
 
-- Python (check version in setup.py)
+- Python with Poetry
 
 ## Setup
 
