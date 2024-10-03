@@ -3,7 +3,7 @@
 [![PyPI](https://img.shields.io/pypi/v/les-louisdelatech.svg)](https://pypi.python.org/pypi/les-louisdelatech)
 [![PyPI versions](https://img.shields.io/pypi/pyversions/les-louisdelatech.svg)](https://pypi.python.org/pypi/les-louisdelatech)
 [![Python test](https://github.com/lyon-esport/LouisDeLaTech/actions/workflows/test.yml/badge.svg)](https://github.com/lyon-esport/LouisDeLaTech/actions/workflows/test.yml)
-[![Code Style](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
+[![Code Style](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff)
 
 ## Requirements
 
