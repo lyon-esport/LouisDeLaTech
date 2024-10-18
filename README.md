@@ -5,17 +5,13 @@
 [![Python test](https://github.com/lyon-esport/LouisDeLaTech/actions/workflows/test.yml/badge.svg)](https://github.com/lyon-esport/LouisDeLaTech/actions/workflows/test.yml)
 [![Code Style](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff)
 
-## Requirements
+# Setup
 
-- Python with Poetry
-
-## Setup
-
-### Discord
+## Discord
 
 Create a [discord bot](https://discord.com/developers/applications) and get the token
 
-### Google
+## Google
 
 - Create a [google project](https://console.cloud.google.com/iam-admin)
 - Create a [google service account](https://console.cloud.google.com/iam-admin/serviceaccounts)
@@ -34,7 +30,7 @@ You must create [user custom attribute](https://admin.google.com/ac/customschema
 }
 ```
 
-### Hello asso
+## Hello asso
 [Documentation](https://centredaide.helloasso.com/s/article/api-comment-fonctionne-l-api-helloasso)
 
 Custom fields
@@ -93,18 +89,19 @@ python3 -m les_louisdelatech.main -c config.toml -g google.json
 ```
 
 # Dev
+Install [uv](https://docs.astral.sh/uv/getting-started/installation/)
 
-Install [Poetry](https://python-poetry.org/docs/master/#installing-with-the-official-installer)
+Install and setup dependencies with `uv sync`
 
-```bash
-poetry install
-poetry shell
+### Run unit test
+```
+uv run pytest --cov
 ```
 
 ### Run ruff
 ```
-poetry run ruff format --check . 
-poetry run ruff check .
+uv run ruff format . 
+uv run ruff check .
 ```
 
 ## Licence

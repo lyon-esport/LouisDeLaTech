@@ -1,17 +1,13 @@
-[tool.poetry]
+[project]
 name = "les-louisdelatech"
-version = "0"
+version = "0.0.0"
 description = "LouisDeLaTech is a discord bot manager for Lyon e-Sport"
-authors = [
-    "Ludovic Ortega <ludovic.ortega@lyon-esport.fr>",
-    "Etienne 'PoPs' G. <etienne.guilluy@lyon-esport.fr>",
-    "Pierre 'DrumSlayer' Sarret <pierre.sarret@lyon-esport.fr>",
-
-]
-license = "CeCILL"
 readme = "README.md"
-homepage = "https://github.com/lyon-esport/LouisDeLaTech"
-repository = "https://github.com/lyon-esport/LouisDeLaTech"
+authors = [
+    {name = "Ludovic Ortega", email = "ludovic.ortega@lyon-esport.fr"},
+    {name = "Etienne 'PoPs' G.", email = "etienne.guilluy@lyon-esport.fr"},
+    {name = "Pierre 'DrumSlayer' Sarret", email = "pierre.sarret@lyon-esport.fr"}
+]
 keywords = ["google", "discord"]
 classifiers = [
     "Programming Language :: Python",
@@ -23,31 +19,41 @@ classifiers = [
     "License :: OSI Approved :: CEA CNRS Inria Logiciel Libre License, version 2.1 (CeCILL-2.1)",
     "Topic :: Utilities",
 ]
-include = [
-    "LICENSE",
-    "LICENSE.fr",
+
+requires-python = ">=3.9,<4.0.0"
+dependencies = [
+    "discord-py~=2.4.0",
+    "Jinja2~=3.1.4",
+    "google-api-python-client~=2.149.0",
+    "google-auth-httplib2~=0.2.0",
+    "requests-oauthlib~=2.0.0",
+    "pyotp~=2.9.0",
+    "tortoise-orm>=0.19.1,<0.21.0",
+    "aiosqlite~=0.20.0",
+    "cryptography~=43.0.1",
+    "sentry-sdk~=2.17.0",
+    "httpx~=0.27.2",
+    "tomli~=2.0.2",
+    "unidecode~=1.3.8",
+    "phonenumbers~=8.13.47",
 ]
 
-[tool.poetry.dependencies]
-python = "^3.9,<4.0.0"
-discord-py = "^2.2.3"
-Jinja2 = "^3.1.2"
-google-api-python-client = "^2.52.0"
-google-auth-httplib2 = "^0.1.0"
-requests-oauthlib="^1.3.1"
-pyotp = "^2.6.0"
-tortoise-orm = ">=0.19.1,<0.21.0"
-aiosqlite = "^0.17.0"
-cryptography = "^43.0.1"
-sentry-sdk = "^2.15.0"
-httpx = "^0.27.2"
-tomli = "^2.0.1"
-unidecode = "^1.3.6"
-phonenumbers = "^8.13.18"
+[project.urls]
+Homepage = "https://github.com/lyon-esport/LouisDeLaTech"
+Repository = "https://github.com/lyon-esport/LouisDeLaTech"
+Issues = "https://github.com/lyon-esport/LouisDeLaTech/issues"
 
-[tool.poetry.group.dev.dependencies]
-ruff = "^0.6.3"
+[project.optional-dependencies]
+dev = [
+    "ruff~=0.7.0"
+]
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/les_louisdelatech"]
