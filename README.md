@@ -93,12 +93,7 @@ Install [uv](https://docs.astral.sh/uv/getting-started/installation/)
 
 Install and setup dependencies with `uv sync`
 
-### Run unit test
-```
-uv run pytest --cov
-```
-
-### Run ruff
+## Run ruff
 ```
 uv run ruff format . 
 uv run ruff check .
