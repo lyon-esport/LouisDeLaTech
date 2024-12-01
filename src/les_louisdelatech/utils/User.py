@@ -97,10 +97,10 @@ class User:
                         item["phone"] = custom_field["answer"]
                     elif "Taille du tee-shirt" == custom_field["name"]:
                         item["tee_shirt"] = custom_field["answer"]
-                    #elif (
+                    # elif (
                     #    "Je m'engage à signer l'engagement de confidentialité"
                     #    in custom_field["name"]
-                    #):
+                    # ):
                     #    item["confidentiality"] = custom_field["answer"]
                 break
 
@@ -108,7 +108,7 @@ class User:
             raise LouisDeLaTechError(
                 f"{order['payer']['firstName']} {order['payer']['lastName']} no valid membership found (or not processed)"
             )
-        #elif item["confidentiality"] == "Non":
+        # elif item["confidentiality"] == "Non":
         #    raise LouisDeLaTechError(
         #        f"{order['payer']['firstName']} {order['payer']['lastName']} disagree to sign the confidentiality agreement"
         #    )
