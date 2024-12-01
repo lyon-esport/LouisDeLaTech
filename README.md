@@ -30,10 +30,10 @@ You must create [user custom attribute](https://admin.google.com/ac/customschema
 }
 ```
 
-## Hello asso
+## HelloAsso
 [Documentation](https://centredaide.helloasso.com/s/article/api-comment-fonctionne-l-api-helloasso)
 
-Custom fields
+Custom fields (Actually hard-coded)
 ```json
 {
     "name": "Pseudonyme",
@@ -64,7 +64,9 @@ Custom fields
     "type": "YesNo",
 }
 ```
-
+To use the commands, please provide the requested form slug. \
+For exemple, for form at `helloasso.com/associations/masuperassociation/adhesions/adhesion-2024-2025/` , the slug is `adhesion-2024-2025`  \
+Resulting in, for exemple, the following command : `/ha_check_update form_slug:adhesion-2024-2025`
 # Install
 
 ```bash
@@ -91,7 +93,7 @@ python3 -m les_louisdelatech.main -c config.toml -g google.json
 # Dev
 Install [uv](https://docs.astral.sh/uv/getting-started/installation/)
 
-Install and setup dependencies with `uv sync`
+Install and setup dependencies with `uv sync --all-extras`
 
 ## Run ruff
 ```
