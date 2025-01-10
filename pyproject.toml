@@ -24,7 +24,7 @@ requires-python = ">=3.9,<4.0.0"
 dependencies = [
     "discord-py~=2.4.0",
     "Jinja2~=3.1.4",
-    "google-api-python-client~=2.149.0",
+    "google-api-python-client>=2.149,<2.159",
     "google-auth-httplib2~=0.2.0",
     "requests-oauthlib~=2.0.0",
     "pyotp~=2.9.0",
