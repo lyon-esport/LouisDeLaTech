@@ -351,6 +351,67 @@ class UserCog(commands.Cog):
             f":white_check_mark: Updated signatures for {user_updated}/{len(users)} users"
         )
 
+    @commands.hybrid_command(
+        name="u_user_signature",
+        help="Update the gmail signature for a single user",
+    )
+    @commands.guild_only()
+    @is_gsuite_admin
+    async def u_user_signature(
+        self,
+        ctx,
+        member: discord.Member = commands.parameter(description="Discord user"),
+    ):
+        """
+        Update the Gmail signature for a single user.
+        """
+        await ctx.defer()
+        try:
+            user = User.from_google(
+                search_user(self.bot.admin_sdk(), member.name, member.id)
+            )
+            is_user_managed(
+                user,
+                self.bot.get_entity_to_skip("teams", "google"),
+            )
+        except LouisDeLaTechError as e:
+            await ctx.send(f"{member} => {e.args[0]}")
+            return
+        except HttpError as e:
+            await ctx.send(format_google_api_error(e))
+            raise
+
+        signature_template = Template(
+            open(
+                os.path.join(
+                    self.bot.root_dir, "./templates/google/gmail_signature.j2"
+                ),
+                encoding="utf-8",
+            ).read()
+        )
+
+        user_team = self.bot.config["teams"].get(user.team, None)
+        if user_team is None or not user_team.get("team_role"):
+            await ctx.send(
+                f":no_entry: Team {user.team} is not managed or invalid in bot config"
+            )
+            return
+
+        try:
+            update_user_signature(
+                self.bot.gmail_sdk(user.email),
+                signature_template,
+                user,
+                user_team["team_role"],
+            )
+        except HttpError as e:
+            await ctx.send(format_google_api_error(e))
+            raise
+
+        await ctx.send(
+            f":white_check_mark: Updated signature for {member.name} ({user.email})"
+        )
+
     @commands.hybrid_command(help="Reset password of an user")
     @commands.guild_only()
     @is_gsuite_admin
