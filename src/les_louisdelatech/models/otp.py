@@ -1,10 +1,10 @@
-from enum import Enum
+from enum import StrEnum
 
 from tortoise import fields
 from tortoise.models import Model
 
 
-class Digest(str, Enum):
+class Digest(StrEnum):
     sha1 = "sha1"
     sha256 = "sha256"
     sha512 = "sha512"

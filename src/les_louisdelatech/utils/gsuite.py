@@ -1,7 +1,6 @@
 import logging
 from functools import wraps
 from http.client import responses
-from typing import List
 
 from googleapiclient.discovery import Resource
 from googleapiclient.errors import HttpError
@@ -36,7 +35,7 @@ def format_google_api_error(error: HttpError):
     return f"Google API error status code {error.status_code}:{responses[error.status_code]}"
 
 
-def is_user_managed(user: User, teams_to_skip: List[str]):
+def is_user_managed(user: User, teams_to_skip: list[str]):
     if user.team in teams_to_skip:
         raise LouisDeLaTechError(
             f"Gsuite account not managed by this bot for this user: {user.email}"
@@ -160,7 +159,9 @@ def update_user_department(admin_sdk: Resource, user: User):
     make_request(admin_sdk.users().update(userKey=user.email, body=body))
 
 
-def update_user_password(admin_sdk: Resource, user: User, password, temporary_pass):
+def update_user_password(
+    admin_sdk: Resource, user: User, password: str, temporary_pass: bool
+):
     body = {
         "password": hash_password(password),
         "hashFunction": "crypt",

@@ -1,6 +1,5 @@
 import logging
 from datetime import datetime, timezone
-from typing import Dict, List
 
 import phonenumbers
 from typing_extensions import Self
@@ -56,7 +55,7 @@ class User:
     def attr_differ(
         self,
         other: Self,
-        attr_to_ignore: List[str] = ["_team", "_position", "discord_id", "is_admin"],
+        attr_to_ignore: list[str] = ["_team", "_position", "discord_id", "is_admin"],
     ):
         diffs = []
         for key in filter(
@@ -68,7 +67,7 @@ class User:
         return diffs
 
     @classmethod
-    def from_hello_asso(cls, order: Dict):
+    def from_hello_asso(cls, order: dict):
         item = None
 
         for _item in order["items"]:
@@ -131,7 +130,7 @@ class User:
         )
 
     @classmethod
-    def from_google(cls, user: Dict):
+    def from_google(cls, user: dict):
         """
         :param user: User object from google API
         """

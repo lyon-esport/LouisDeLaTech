@@ -1,15 +1,15 @@
 import crypt
 import secrets
-import string
 
 
-def generate_password():
-    alphabet = string.ascii_letters + string.digits + string.punctuation
+def generate_password() -> str:
+    ascii_alphabet = "".join(chr(i) for i in range(128))
     password = "".join(
-        secrets.choice(alphabet) for _ in range(secrets.SystemRandom().randint(20, 30))
+        secrets.choice(ascii_alphabet)
+        for _ in range(secrets.SystemRandom().randint(20, 30))
     )
     return password
 
 
-def hash_password(password: str):
+def hash_password(password: str) -> str:
     return crypt.crypt(password, crypt.METHOD_SHA512)
