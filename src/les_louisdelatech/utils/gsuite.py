@@ -118,7 +118,7 @@ def add_user(
         "recoveryEmail": user.backup_email,
         "organizations": [{"primary": True, "customType": "", "department": user.team}],
         "password": hash_password(password),
-        "hashFunction": "crypt",
+        "hashFunction": "SHA-1",
         "changePasswordAtNextLogin": True,
     }
     make_request(admin_sdk.users().insert(body=body))
@@ -164,7 +164,7 @@ def update_user_password(
 ):
     body = {
         "password": hash_password(password),
-        "hashFunction": "crypt",
+        "hashFunction": "SHA-1",
         "changePasswordAtNextLogin": temporary_pass,
     }
     make_request(admin_sdk.users().update(userKey=user.email, body=body))

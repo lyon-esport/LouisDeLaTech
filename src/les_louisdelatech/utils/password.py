@@ -1,4 +1,4 @@
-import crypt
+import hashlib
 import secrets
 
 
@@ -12,4 +12,4 @@ def generate_password() -> str:
 
 
 def hash_password(password: str) -> str:
-    return crypt.crypt(password, crypt.METHOD_SHA512)
+    return hashlib.sha1(password.encode()).hexdigest()
