@@ -2,7 +2,7 @@ name: Python release
 on:
   push:
     tags:
-      - '*'
+      - "*"
 permissions:
   contents: write
 jobs:
@@ -12,18 +12,18 @@ jobs:
       # this permission is mandatory for trusted publishing
       id-token: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Install uv
-        uses: astral-sh/setup-uv@v3
+        uses: astral-sh/setup-uv@v6
       - name: "Set up Python"
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version-file: ".python-version"
       - name: Install the project
         run: uv sync --all-extras
       - name: Publish package
         run: |
-          sed -i -e "s/0.0.0/${GITHUB_REF#refs/*/}/" pyproject.toml
+          uv version "${GITHUB_REF#refs/*/}"
           uv build
       - name: Publish package distributions to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
