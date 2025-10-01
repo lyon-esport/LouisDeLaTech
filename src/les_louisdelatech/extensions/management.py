@@ -48,7 +48,7 @@ class ManagementCog(commands.Cog):
             channel_number = 1
 
             while new_channel_name is None:
-                channel_name_check = f'{self.bot.config["discord"]["voice_channel_creation"]["new_channel_name"]} #{channel_number}'
+                channel_name_check = f"{self.bot.config['discord']['voice_channel_creation']['new_channel_name']} #{channel_number}"
                 if (
                     channel_name_check not in list_channels_name
                     or not list_channels_name
