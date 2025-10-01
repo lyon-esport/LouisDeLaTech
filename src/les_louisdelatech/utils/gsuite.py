@@ -108,7 +108,7 @@ def add_user(
                 "discordId": user.discord_id,
                 "pseudo": user.pseudo,
                 "teeShirt": user.tee_shirt,
-                "birthdate": user.birthdate.astimezone().isoformat(),
+                "birthdate": user.birthdate.strftime("%d/%m/%Y"),
             },
         },
         "addresses": [{"formatted": user.address}],
