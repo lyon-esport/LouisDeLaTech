@@ -5,11 +5,14 @@ from discord.ext.commands import Context
 
 
 class CatCog(commands.Cog):
+    """Fun command used to validate the bot is alive and can call external APIs."""
+
     def __init__(self, bot):
         self.bot = bot
 
     @commands.hybrid_command(name="cat", help="Get cat")
     async def get_cat(self, ctx: Context):
+        """Fetch a random cat image URL and post it as an embed."""
         await ctx.defer()
         async with httpx.AsyncClient() as client:
             cat_data = await client.get("https://api.thecatapi.com/v1/images/search")

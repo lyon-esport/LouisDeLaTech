@@ -1,6 +1,20 @@
+"""
+Application entrypoint.
+
+Responsibilities:
+- Parse CLI args (-c config path, -g Google service account JSON path)
+- Load TOML config (see `config.example`)
+- Configure structured-ish logging for operational debugging
+- Initialize Sentry (optional) and start the Discord bot
+
+This module intentionally does not contain bot logic. All bot behavior lives in:
+- `les_louisdelatech/bot.py` (core bot wiring)
+- `les_louisdelatech/extensions/*` (commands and listeners)
+"""
+
 import logging
-from argparse import ArgumentParser
 import tomllib
+from argparse import ArgumentParser
 
 import sentry_sdk
 
@@ -10,6 +24,12 @@ logger = logging.getLogger()
 
 
 def _parse_log_level(value):
+    """Parse a log level value from config.
+
+    Accepts:
+    - int (e.g. 10)
+    - str (e.g. "INFO", "debug")
+    """
     if isinstance(value, int):
         return value
     if isinstance(value, str):
@@ -18,6 +38,10 @@ def _parse_log_level(value):
 
 
 def _configure_logging(level):
+    """Configure global logging.
+
+    `force=True` ensures we override any logging config done by dependencies.
+    """
     logging.basicConfig(
         level=level,
         format="%(asctime)s %(levelname)s %(name)s:%(lineno)d - %(message)s",

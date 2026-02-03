@@ -2,11 +2,14 @@ from discord.ext import commands
 
 
 class ConfigCog(commands.Cog):
+    """Lightweight commands exposing bot configuration."""
+
     def __init__(self, bot):
         self.bot = bot
 
     @commands.hybrid_command(name="gteams", help="Get available teams")
     async def get_teams(self, ctx):
+        """List team keys configured in `config.toml`."""
         await ctx.defer()
         message = "Available teams :\n```"
 

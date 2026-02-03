@@ -11,6 +11,8 @@ logger = logging.getLogger()
 
 
 class HelloAssoCog(commands.Cog):
+    """Commands to compare HelloAsso memberships against Google Workspace users."""
+
     def __init__(self, bot):
         self.bot = bot
 
@@ -23,7 +25,10 @@ class HelloAssoCog(commands.Cog):
         form_slug: str = commands.parameter(description="Form slug name"),
     ):
         """
-        Display new and updated users
+        Display new and updated users.
+
+        - "New" = present in HelloAsso paid memberships, absent from Google users.
+        - "Updated" = present in both, but one or more fields differ (address/phone/etc).
         """
         new_user_count = 0
         updated_user_count = 0
@@ -84,7 +89,11 @@ class HelloAssoCog(commands.Cog):
         form_slug: str = commands.parameter(description="Form slug name"),
     ):
         """
-        Display users who haven't paid
+        Display users who haven't paid.
+
+        "Unpaid" here means:
+        - user exists in Google Workspace
+        - but no matching paid membership exists in HelloAsso for the given form slug
         """
         unpaid_user_count = 0
 

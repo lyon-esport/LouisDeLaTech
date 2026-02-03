@@ -11,6 +11,19 @@ logger = logging.getLogger()
 
 
 class User:
+    """Domain object representing a member/user across systems.
+
+    This is the "bridge" model between:
+    - Discord (member id, nickname)
+    - Google Workspace (primaryEmail, custom schema fields, org/team)
+    - HelloAsso (payer fields + custom fields from the membership form)
+
+    Notes:
+    - `email` defaults to `firstname.lastname@lyon-esport.fr` derived from name.
+    - `backup_email` corresponds to the user's personal email (Google 'home' email).
+    - `team` is stored lowercased to match config keys.
+    """
+
     def __init__(
         self,
         firstname: str,
@@ -47,6 +60,7 @@ class User:
         return f"{self.firstname} {self.lastname}"
 
     def __eq__(self, other: Self):
+        """Equality is based on derived email (firstname.lastname)."""
         return self.email_from_name() == other.email_from_name()
 
     def __hash__(self):
@@ -57,6 +71,7 @@ class User:
         other: Self,
         attr_to_ignore: list[str] = ["_team", "_position", "discord_id", "is_admin"],
     ):
+        """Return a list of attribute names that differ between two users."""
         diffs = []
         for key in filter(
             lambda x: x not in attr_to_ignore,
@@ -68,6 +83,11 @@ class User:
 
     @classmethod
     def from_hello_asso(cls, order: dict):
+        """Build a `User` from a HelloAsso order payload.
+
+        We only consider orders that contain a `Membership` item with state
+        `Processed`. Custom fields are mapped based on French labels.
+        """
         item = None
 
         for _item in order["items"]:
@@ -131,8 +151,11 @@ class User:
 
     @classmethod
     def from_google(cls, user: dict):
-        """
-        :param user: User object from google API
+        """Build a `User` from a Google Admin SDK user payload.
+
+        Requirements:
+        - `customSchemas.custom.discordId` exists (link to Discord identity)
+        - `organizations[0].department` exists (team)
         """
         if not user:
             raise LouisDeLaTechError("User not found, user is not setup on Gsuite")
@@ -224,6 +247,7 @@ class User:
 
     @phone.setter
     def phone(self, value: str):
+        """Normalize phone numbers to E.164 (FR) for consistency in Google/HelloAsso."""
         self._phone = (
             phonenumbers.format_number(
                 phonenumbers.parse(value, "FR"), phonenumbers.PhoneNumberFormat.E164
@@ -270,6 +294,7 @@ class User:
         return f"{firstname} {pseudo} {lastname[:1].upper()}"
 
     def email_from_name(self):
+        """Compute default Workspace email from normalized firstname/lastname."""
         firstname = unidecode(self.firstname).lower().replace(" ", "").replace("-", "")
         lastname = unidecode(self.lastname).lower().replace(" ", "").replace("-", "")
 

@@ -112,6 +112,10 @@ You can find all details here: <https://cecill.info/licences/Licence_CeCILL_V2.1
 ## Changelog
 See `CHANGELOG.md` for step-by-step updates.
 
+## Docs
+- `docs/ARCHITECTURE.md`: high-level overview of the codebase
+- `docs/CONFIGURATION.md`: config reference and required keys/scopes
+
 ## Credits
 
 Copyright © Lyon e-Sport, 2021

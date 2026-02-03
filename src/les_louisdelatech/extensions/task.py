@@ -8,6 +8,12 @@ logger = logging.getLogger()
 
 
 class TaskCog(commands.Cog):
+    """Background tasks for the bot.
+
+    Currently only rotates the bot presence/activity every 10 minutes based on
+    `discord.bot_activity` in config.
+    """
+
     def __init__(self, bot):
         self.bot = bot
         self.change_bot_activity.start()

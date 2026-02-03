@@ -1,3 +1,13 @@
+"""Google Workspace (Gsuite) helpers.
+
+This module wraps calls to Google Admin SDK and Gmail settings APIs.
+
+Key ideas:
+- "Identity" is keyed by the custom attribute `custom.discordId` stored on the
+  Google user.
+- Provisioning creates users, assigns groups, and configures Gmail signature.
+"""
+
 import logging
 from functools import wraps
 from http.client import responses
@@ -13,6 +23,8 @@ logger = logging.getLogger(__name__)
 
 
 def is_gsuite_admin(func):
+    """Decorator: allow command only if the caller is a Google Workspace admin."""
+
     @wraps(func)
     async def wrapper(self, ctx, *args, **kwargs):
         try:
@@ -32,6 +44,7 @@ def is_gsuite_admin(func):
 
 
 def format_google_api_error(error: HttpError):
+    """Return a compact error string for display in Discord."""
     status = getattr(error, "status_code", None)
     if status:
         return (
@@ -41,6 +54,7 @@ def format_google_api_error(error: HttpError):
 
 
 def is_user_managed(user: User, teams_to_skip: list[str]):
+    """Raise if a user's team is configured as out-of-scope for this bot."""
     if user.team in teams_to_skip:
         raise LouisDeLaTechError(
             f"Gsuite account not managed by this bot for this user: {user.email}"
@@ -48,12 +62,14 @@ def is_user_managed(user: User, teams_to_skip: list[str]):
 
 
 def user_is_in_group(admin_sdk: Resource, user: User, group_email: str):
+    """Check if a user is a member of a Google Group."""
     return make_request(
         admin_sdk.members().hasMember(groupKey=group_email, memberKey=user.email)
     )["isMember"]
 
 
 def get_users(admin_sdk: Resource):
+    """List all users in the lyon-esport.fr domain (admin view, full projection)."""
     users = []
     resp = {"nextPageToken": None}
     while "nextPageToken" in resp:
@@ -73,6 +89,7 @@ def get_users(admin_sdk: Resource):
 
 
 def search_user(admin_sdk: Resource, discord_pseudo, discord_id):
+    """Find a Google user by Discord ID stored in the custom schema."""
     users = make_request(
         admin_sdk.users().list(
             query=f"custom.discordId={discord_id}",
@@ -101,6 +118,13 @@ def add_user(
     user: User,
     password: str,
 ):
+    """Create a Google Workspace user.
+
+    Notes:
+    - We provide password as SHA-1 hash because Google Admin API supports
+      `hashFunction: SHA-1` for compatibility with existing flows.
+    - Optional fields are only included if present to avoid 400 errors.
+    """
     body = {
         "name": {
             "familyName": user.lastname,
@@ -133,6 +157,7 @@ def add_user(
 
 
 def update_user_signature(gmail_sdk: Resource, template, user: User, team_role: bool):
+    """Update the Gmail signature for a user."""
     make_request(
         gmail_sdk.users()
         .settings()
@@ -156,11 +181,13 @@ def update_user_signature(gmail_sdk: Resource, template, user: User, team_role: 
 
 
 def suspend_user(admin_sdk: Resource, user: User):
+    """Suspend a Google user (soft deprovision)."""
     body = {"suspended": True}
     make_request(admin_sdk.users().update(userKey=user.email, body=body))
 
 
 def update_user_department(admin_sdk: Resource, user: User):
+    """Update the user's department (= team)."""
     body = {
         "organizations": [{"primary": True, "customType": "", "department": user.team}]
     }
@@ -170,6 +197,7 @@ def update_user_department(admin_sdk: Resource, user: User):
 def update_user_password(
     admin_sdk: Resource, user: User, password: str, temporary_pass: bool
 ):
+    """Set a user's password and optionally force change at next login."""
     body = {
         "password": hash_password(password),
         "hashFunction": "SHA-1",
@@ -179,6 +207,7 @@ def update_user_password(
 
 
 def add_user_team(admin_sdk: Resource, user: User, group_email: str):
+    """Add a user to a Google Group."""
     body = {
         "email": user.email,
         "role": "MEMBER",
@@ -187,6 +216,7 @@ def add_user_team(admin_sdk: Resource, user: User, group_email: str):
 
 
 def delete_user_group(admin_sdk: Resource, user: User, group_email: str):
+    """Remove a user from a Google Group if currently a member."""
     if user_is_in_group(admin_sdk, user, group_email):
         make_request(
             admin_sdk.members().delete(groupKey=group_email, memberKey=user.email)
@@ -194,4 +224,5 @@ def delete_user_group(admin_sdk: Resource, user: User, group_email: str):
 
 
 def make_request(req):
+    """Single place to execute API requests (easy to extend with retries later)."""
     return req.execute()

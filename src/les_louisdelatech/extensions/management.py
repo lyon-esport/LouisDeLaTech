@@ -8,6 +8,15 @@ logger = logging.getLogger()
 
 
 class ManagementCog(commands.Cog):
+    """Discord server management commands/listeners.
+
+    Current features:
+    - `/topic`: update the current channel topic
+    - Voice channel auto-management: when a user joins a configured "trigger"
+      voice channel, we create a new meeting channel and move them into it.
+      When the meeting channel becomes empty, we delete it.
+    """
+
     def __init__(self, bot):
         self.bot = bot
 

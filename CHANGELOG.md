@@ -5,6 +5,7 @@ All notable changes to this project are documented here.
 ### Added
 - More explicit log format (timestamp + level + logger + line). (`src/les_louisdelatech/main.py`)
 - Validation for OTP digest/digits. (`src/les_louisdelatech/extensions/otp.py`)
+- Developer documentation in `docs/` and explanatory docstrings/comments across the codebase.
 
 ### Fixed
 - HelloAsso pagination (no more infinite loop). (`src/les_louisdelatech/utils/hello_asso.py`)

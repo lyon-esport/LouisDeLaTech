@@ -32,6 +32,17 @@ logger = logging.getLogger()
 
 
 class UserCog(commands.Cog):
+    """User lifecycle commands (provisioning/deprovisioning) across Discord + Google.
+
+    Main flows:
+    - `/provision`: create Google Workspace account, add to Google Groups, set Gmail
+      signature, apply Discord roles/nickname, then send credentials by email.
+    - `/deprovision`: suspend Google account and remove Discord roles.
+    - `/uteam`: move a user to a different team (Google Groups + Discord roles + signature).
+    - `/usignatures`: bulk update Gmail signatures.
+    - `/rpassword`: reset Google password and send temporary password by email.
+    """
+
     @commands.hybrid_command(help="Provision an user")
     @commands.guild_only()
     @is_gsuite_admin
@@ -86,6 +97,8 @@ class UserCog(commands.Cog):
             pseudo,
             member.id,
             None,
+            # `email` parameter is the *personal* email used as Google recovery email.
+            # The Workspace email is derived from firstname/lastname by `User.email_from_name()`.
             email,
             phone,
             address,
@@ -94,11 +107,12 @@ class UserCog(commands.Cog):
         )
 
         try:
+            # Create the Workspace account then add it to the team Google Group.
             add_user(admin_sdk, user, password)
             add_user_team(admin_sdk, user, team["google_email"])
 
-            # Force a short delay or refresh token will cause an error
-            # maybe API caching issue (if request is too fast)
+            # Practical workaround: Google APIs can be eventually consistent. If we
+            # update Gmail settings too quickly, we can hit transient errors.
             await asyncio.sleep(5)
 
             update_user_signature(
@@ -167,6 +181,7 @@ class UserCog(commands.Cog):
             return
 
         try:
+            # Sender is the delegated mailbox `google.subject`.
             send_email(
                 self.bot.mailer_sdk(),
                 from_addr=self.bot.config["google"]["subject"],

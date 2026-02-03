@@ -15,6 +15,14 @@ logger = logging.getLogger()
 
 
 class OtpCog(commands.Cog):
+    """Commands to manage OTP secrets per team.
+
+    Security model:
+    - Secrets are stored encrypted in SQLite (see `models/otp.py` + `bot.encrypt`).
+    - Users can only access OTPs for their own team (team is resolved from Google).
+    - `/gotp` sends the generated code in DM to reduce leaking secrets in channels.
+    """
+
     def __init__(self, bot):
         self.bot = bot
 
@@ -22,6 +30,7 @@ class OtpCog(commands.Cog):
     @commands.guild_only()
     @is_team_allowed
     async def list_otp(self, ctx):
+        """List OTP entries available for the caller's team."""
         await ctx.defer()
         try:
             user = User.from_google(
@@ -52,6 +61,7 @@ class OtpCog(commands.Cog):
     async def get_otp(
         self, ctx, name: str = commands.parameter(description="Otp name")
     ):
+        """Send the current TOTP code for a named OTP entry (DM)."""
         await ctx.defer()
         try:
             user = User.from_google(
@@ -94,6 +104,12 @@ class OtpCog(commands.Cog):
         digits: int = commands.parameter(description="Otp digits"),
         secret: str = commands.parameter(description="Otp secret"),
     ):
+        """Create a new OTP entry for the caller's team.
+
+        - `digest` must be one of sha1/sha256/sha512
+        - `digits` must be between 6 and 10
+        - `secret` is encrypted before storing
+        """
         await ctx.defer()
         if ctx.message:
             await ctx.message.delete()
