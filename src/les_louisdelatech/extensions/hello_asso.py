@@ -11,6 +11,8 @@ logger = logging.getLogger()
 
 
 class HelloAssoCog(commands.Cog):
+    """Commands to compare HelloAsso memberships against Google Workspace users."""
+
     def __init__(self, bot):
         self.bot = bot
 
@@ -23,7 +25,10 @@ class HelloAssoCog(commands.Cog):
         form_slug: str = commands.parameter(description="Form slug name"),
     ):
         """
-        Display new and updated users
+        Display new and updated users.
+
+        - "New" = present in HelloAsso paid memberships, absent from Google users.
+        - "Updated" = present in both, but one or more fields differ (address/phone/etc).
         """
         new_user_count = 0
         updated_user_count = 0
@@ -51,10 +56,11 @@ class HelloAssoCog(commands.Cog):
             try:
                 user = User.from_hello_asso(membership)
             except LouisDeLaTechError as e:
-                logger.debug(ctx.send(e.args[0]))
+                logger.debug("HelloAsso user ignored: %s", e)
+                await ctx.send(e.args[0])
                 continue
             except ValueError as e:
-                await ctx.send(ctx.send(e.args[0]))
+                await ctx.send(e.args[0])
                 continue
 
             for current_user in current_users:
@@ -83,7 +89,11 @@ class HelloAssoCog(commands.Cog):
         form_slug: str = commands.parameter(description="Form slug name"),
     ):
         """
-        Display users who haven't paid
+        Display users who haven't paid.
+
+        "Unpaid" here means:
+        - user exists in Google Workspace
+        - but no matching paid membership exists in HelloAsso for the given form slug
         """
         unpaid_user_count = 0
 
@@ -99,10 +109,11 @@ class HelloAssoCog(commands.Cog):
                 user = User.from_hello_asso(membership_order)
                 membership_orders.append(user)
             except LouisDeLaTechError as e:
-                logger.debug(ctx.send(e.args[0]))
+                logger.debug("HelloAsso user ignored: %s", e)
+                await ctx.send(e.args[0])
                 continue
             except ValueError as e:
-                await ctx.send(ctx.send(e.args[0]))
+                await ctx.send(e.args[0])
                 continue
 
         for current_user in current_users:

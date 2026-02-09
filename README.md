@@ -90,6 +90,8 @@ Fill `config.toml` with `config.example`
 python3 -m les_louisdelatech.main -c config.toml -g google.json
 ```
 
+Note: the bot sends provisioning/reset credentials by email (not Discord DM). Make sure your Google delegated scopes include Gmail send (see `config.example`).
+
 # Dev
 Install [uv](https://docs.astral.sh/uv/getting-started/installation/)
 
@@ -106,6 +108,13 @@ uv run ruff check .
 The code is under CeCILL license.
 
 You can find all details here: <https://cecill.info/licences/Licence_CeCILL_V2.1-en.html>
+
+## Changelog
+See `CHANGELOG.md` for step-by-step updates.
+
+## Docs
+- `docs/ARCHITECTURE.md`: high-level overview of the codebase
+- `docs/CONFIGURATION.md`: config reference and required keys/scopes
 
 ## Credits
 

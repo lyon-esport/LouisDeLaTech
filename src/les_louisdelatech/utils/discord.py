@@ -5,6 +5,12 @@ logger = logging.getLogger(__name__)
 
 
 def is_team_allowed(func):
+    """Decorator: block commands for teams configured in `to_skip.teams.discord`.
+
+    This is used for commands that should not be available to certain roles
+    (e.g. alumnis, outsiders, etc).
+    """
+
     @wraps(func)
     async def wrapper(self, ctx, *args, **kwargs):
         for role in ctx.author.roles:

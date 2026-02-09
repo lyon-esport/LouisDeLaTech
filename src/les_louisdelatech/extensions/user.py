@@ -1,11 +1,11 @@
 import logging
+import asyncio
 import os
-import time
 from datetime import datetime
 
 import discord
 from discord.ext import commands
-from discord.utils import escape_markdown, get
+from discord.utils import get
 from googleapiclient.errors import HttpError
 from jinja2 import Template
 
@@ -24,6 +24,7 @@ from les_louisdelatech.utils.gsuite import (
     update_user_signature,
 )
 from les_louisdelatech.utils.LouisDeLaTechError import LouisDeLaTechError
+from les_louisdelatech.utils.email import send_email
 from les_louisdelatech.utils.password import generate_password
 from les_louisdelatech.utils.User import User
 
@@ -31,6 +32,17 @@ logger = logging.getLogger()
 
 
 class UserCog(commands.Cog):
+    """User lifecycle commands (provisioning/deprovisioning) across Discord + Google.
+
+    Main flows:
+    - `/provision`: create Google Workspace account, add to Google Groups, set Gmail
+      signature, apply Discord roles/nickname, then send credentials by email.
+    - `/deprovision`: suspend Google account and remove Discord roles.
+    - `/uteam`: move a user to a different team (Google Groups + Discord roles + signature).
+    - `/usignatures`: bulk update Gmail signatures.
+    - `/rpassword`: reset Google password and send temporary password by email.
+    """
+
     @commands.hybrid_command(help="Provision an user")
     @commands.guild_only()
     @is_gsuite_admin
@@ -40,7 +52,7 @@ class UserCog(commands.Cog):
         member: discord.Member = commands.parameter(description="Discord user"),
         firstname: str = commands.parameter(description="User firstname"),
         lastname: str = commands.parameter(description="User lastname"),
-        email: str = commands.parameter(description="User email"),
+        email: str = commands.parameter(description="User personal email (backup)"),
         birthdate: str = commands.parameter(
             description="User birthdate like 28/02/2023"
         ),
@@ -85,6 +97,8 @@ class UserCog(commands.Cog):
             pseudo,
             member.id,
             None,
+            # `email` parameter is the *personal* email used as Google recovery email.
+            # The Workspace email is derived from firstname/lastname by `User.email_from_name()`.
             email,
             phone,
             address,
@@ -93,12 +107,13 @@ class UserCog(commands.Cog):
         )
 
         try:
+            # Create the Workspace account then add it to the team Google Group.
             add_user(admin_sdk, user, password)
             add_user_team(admin_sdk, user, team["google_email"])
 
-            # force time sleep or refresh token will cause an error
-            # maybe API caching issue (if request is too fast)
-            time.sleep(5)
+            # Practical workaround: Google APIs can be eventually consistent. If we
+            # update Gmail settings too quickly, we can hit transient errors.
+            await asyncio.sleep(5)
 
             update_user_signature(
                 self.bot.gmail_sdk(user.email),
@@ -132,22 +147,15 @@ class UserCog(commands.Cog):
 
         await ctx.send(f"User {user.email} provisionned")
 
-        template = Template(
+        base_template = Template(
             open(
                 os.path.join(self.bot.root_dir, "./templates/discord/base.j2"),
                 encoding="utf-8",
             ).read()
         )
-        await member.send(
-            template.render(
-                {
-                    "email": user.email,
-                    "password": escape_markdown(password),
-                }
-            )
-        )
+        body = base_template.render({"email": user.email, "password": password})
 
-        template = Template(
+        team_template = Template(
             open(
                 os.path.join(
                     self.bot.root_dir,
@@ -156,9 +164,34 @@ class UserCog(commands.Cog):
                 encoding="utf-8",
             ).read()
         )
-        team_message = template.render()
+        team_message = team_template.render()
         if team_message:
-            await member.send(team_message)
+            body = f"{body}\n\n{team_message}"
+
+        # Do not send passwords via Discord DM (often disabled). Email the user instead.
+        if not user.backup_email:
+            await ctx.send(
+                ":no_entry: No personal email (backup_email) available to send credentials."
+            )
+            return
+        if not self.bot.config["google"]["subject"]:
+            await ctx.send(
+                ":no_entry: google.subject is missing in config; cannot send emails."
+            )
+            return
+
+        try:
+            # Sender is the delegated mailbox `google.subject`.
+            send_email(
+                self.bot.mailer_sdk(),
+                from_addr=self.bot.config["google"]["subject"],
+                to_addr=user.backup_email,
+                subject="Bienvenue a Lyon e-Sport - Acces Google Workspace",
+                body=body,
+            )
+        except HttpError as e:
+            await ctx.send(format_google_api_error(e))
+            raise
 
     def __init__(self, bot):
         self.bot = bot
@@ -392,12 +425,32 @@ class UserCog(commands.Cog):
             await ctx.send(format_google_api_error(e))
             raise
 
-        await member.send(
-            template.render(
-                {"email": user.email, "password": escape_markdown(temp_pass)}
+        if not user.backup_email:
+            await ctx.send(
+                f":no_entry: No personal email (backup_email) found for {member.name}; cannot send reset password."
             )
+            return
+        if not self.bot.config["google"]["subject"]:
+            await ctx.send(
+                ":no_entry: google.subject is missing in config; cannot send emails."
+            )
+            return
+
+        try:
+            send_email(
+                self.bot.mailer_sdk(),
+                from_addr=self.bot.config["google"]["subject"],
+                to_addr=user.backup_email,
+                subject="Reset mot de passe - Lyon e-Sport Workspace",
+                body=template.render({"email": user.email, "password": temp_pass}),
+            )
+        except HttpError as e:
+            await ctx.send(format_google_api_error(e))
+            raise
+
+        await ctx.send(
+            f":white_check_mark: Sent a new password to {member.name} by email"
         )
-        await ctx.send(f":white_check_mark: Sent a new password to {member.name} in PM")
 
 
 async def setup(bot):

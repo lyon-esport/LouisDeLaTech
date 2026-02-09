@@ -3,8 +3,9 @@ import logging
 import pyotp
 from discord.ext import commands
 from googleapiclient.errors import HttpError
+from tortoise.exceptions import DoesNotExist
 
-from les_louisdelatech.models.otp import Otp
+from les_louisdelatech.models.otp import Digest, Otp
 from les_louisdelatech.utils.discord import is_team_allowed
 from les_louisdelatech.utils.gsuite import format_google_api_error, search_user
 from les_louisdelatech.utils.LouisDeLaTechError import LouisDeLaTechError
@@ -14,6 +15,14 @@ logger = logging.getLogger()
 
 
 class OtpCog(commands.Cog):
+    """Commands to manage OTP secrets per team.
+
+    Security model:
+    - Secrets are stored encrypted in SQLite (see `models/otp.py` + `bot.encrypt`).
+    - Users can only access OTPs for their own team (team is resolved from Google).
+    - `/gotp` sends the generated code in DM to reduce leaking secrets in channels.
+    """
+
     def __init__(self, bot):
         self.bot = bot
 
@@ -21,6 +30,7 @@ class OtpCog(commands.Cog):
     @commands.guild_only()
     @is_team_allowed
     async def list_otp(self, ctx):
+        """List OTP entries available for the caller's team."""
         await ctx.defer()
         try:
             user = User.from_google(
@@ -51,6 +61,7 @@ class OtpCog(commands.Cog):
     async def get_otp(
         self, ctx, name: str = commands.parameter(description="Otp name")
     ):
+        """Send the current TOTP code for a named OTP entry (DM)."""
         await ctx.defer()
         try:
             user = User.from_google(
@@ -63,7 +74,11 @@ class OtpCog(commands.Cog):
             await ctx.send(format_google_api_error(e))
             raise
 
-        otp = await Otp.get(name=name, team=user.team)
+        try:
+            otp = await Otp.get(name=name, team=user.team)
+        except DoesNotExist:
+            await ctx.send(f":no_entry: Otp code {name} not found for team {user.team}")
+            return
         totp = pyotp.TOTP(
             s=self.bot.decrypt(otp.secret),
             digest=otp.digest,
@@ -86,11 +101,18 @@ class OtpCog(commands.Cog):
         ctx,
         name: str = commands.parameter(description="Otp name"),
         digest: str = commands.parameter(description="Otp digest"),
-        digits: str = commands.parameter(description="Otp digits"),
+        digits: int = commands.parameter(description="Otp digits"),
         secret: str = commands.parameter(description="Otp secret"),
     ):
+        """Create a new OTP entry for the caller's team.
+
+        - `digest` must be one of sha1/sha256/sha512
+        - `digits` must be between 6 and 10
+        - `secret` is encrypted before storing
+        """
         await ctx.defer()
-        await ctx.message.delete()
+        if ctx.message:
+            await ctx.message.delete()
 
         try:
             user = User.from_google(
@@ -103,10 +125,22 @@ class OtpCog(commands.Cog):
             await ctx.send(format_google_api_error(e))
             raise
 
+        try:
+            digest_value = Digest(digest)
+        except ValueError:
+            await ctx.send(
+                f":no_entry: Invalid digest '{digest}'. Allowed: {', '.join([d.value for d in Digest])}"
+            )
+            return
+
+        if digits < 6 or digits > 10:
+            await ctx.send(":no_entry: Digits must be between 6 and 10")
+            return
+
         await Otp.create(
             name=name,
             team=user.team,
-            digest=digest,
+            digest=digest_value,
             digits=digits,
             secret=self.bot.encrypt(secret),
         )
