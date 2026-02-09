@@ -21,7 +21,7 @@ def _gmail_raw_message(*, from_addr: str, to_addr: str, subject: str, body: str)
     msg["To"] = to_addr
     msg["From"] = from_addr
     msg["Subject"] = subject
-    msg.set_content(body)
+    msg.set_content(body, subtype="html")
 
     # Gmail API expects the RFC 2822 message in base64url encoding.
     return base64.urlsafe_b64encode(msg.as_bytes()).decode("ascii")

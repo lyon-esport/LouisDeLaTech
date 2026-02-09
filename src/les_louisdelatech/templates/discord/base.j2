@@ -1,21 +1,47 @@
-Bonjour à toi !
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  body { font-family: sans-serif; line-height: 1.6; color: #333; }
+  .branding { color: #d9534f; font-weight: bold; }
+  .credentials { background-color: #f9f9f9; padding: 15px; border-left: 5px solid #d9534f; margin: 20px 0; }
+  .alert { font-weight: bold; color: #d9534f; font-size: 1.2em; text-align: center; border: 2px solid #d9534f; padding: 15px; margin: 20px 0; background-color: #fff5f5; border-radius: 5px; }
+  .footer { margin-top: 20px; font-size: 0.9em; color: #777; border-top: 1px solid #eee; padding-top: 10px; }
+  a { color: #0056b3; text-decoration: none; }
+</style>
+</head>
+<body>
+  <h2>Bonjour à toi !</h2>
+  
+  <p>Voici les informations pour te connecter à ton compte <span class="branding">Lyon e-Sport</span> :</p>
+  
+  <div class="credentials">
+    <p><strong>Lien de connexion :</strong> <a href="https://accounts.google.com/ServiceLogin">https://accounts.google.com/ServiceLogin</a></p>
+    <p><strong>Email :</strong> {{ email }}</p>
+    <p><strong>Mot de passe :</strong> {{ password|safe }}</p>
+  </div>
+  
+  <p><em>Tu seras invité à changer ton mot de passe lors de la première connexion.</em></p>
 
-Voici les informations pour te connecter :
+  <div class="alert">
+    ⚠️ IMPORTANT : Tu dois IMPÉRATIVEMENT activer la double authentification (2FA) sur ton compte Google dès ta première connexion ! ⚠️
+  </div>
 
-**lien** => `https://accounts.google.com/ServiceLogin`
-**email** => `{{ email }}`
-**mot de passe** => `{{ password|safe }}`
+  <p>Tu as désormais accès aux outils de l'asso via le compte Google Lyon e-Sport :</p>
+  <ul>
+    <li><a href="https://drive.google.com/drive/shared-drives">Google Drive</a> (gestionnaire de fichiers)</li>
+    <li><a href="https://projet.lyon-esport.fr/">Gestion de Projets</a></li>
+    <li><a href="https://wiki.lyon-esport.fr/">Wiki</a> (Documentations)</li>
+  </ul>
 
-Tu seras invité à changer ton mot de passe lors de la première connexion.
+  <p>Avec ces liens tu verras l'essentiel du travail de l'asso. Bien évidemment, tout ce qui concerne la LES sera uniquement ici.</p>
 
-Tu as accès maintenant aux divers outils de l'asso, n'hésite pas à naviguer avec ton adresse mail Lyon e-Sport :
-- Drive (gestionnaire de fichiers) : https://drive.google.com/drive/shared-drives
+  <p>Le compte Google LES te permettra d'utiliser l'ensemble des services liés à Google Workspace !</p>
+  
+  <p>Si tu as des questions, n'hésite surtout pas à revenir vers les différents chan de la <strong>#Technique</strong> sur Discord ! On se fera un plaisir de te répondre.</p>
 
-(attention à bien utiliser à la première connexion, il faut cliquer sur "Vous n'avez pas de compte ?" puis "S'inscrire avec Google")
-
-Avec ces liens tu verras  l'essentiel du travail de l'asso. Bien évidemment, tout ce qui concerne la LES sera uniquement ici.
-
-Le compte Google LES te permettra d'utiliser l'ensemble des services liés aux GAPPS/Workspace !
-Si tu as des questions, n'hésite surtout pas à revenir vers les différents chan de la #Technique ! On se fera un plaisir de te répondre.
-
-Bienvenue à la Lyon e-Sport ! :wink: :grin:
+  <div class="footer">
+    <p>Bienvenue à la Lyon e-Sport ! 😉😁</p>
+  </div>
+</body>
+</html>
