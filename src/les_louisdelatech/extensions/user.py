@@ -147,14 +147,6 @@ class UserCog(commands.Cog):
 
         await ctx.send(f"User {user.email} provisionned")
 
-        base_template = Template(
-            open(
-                os.path.join(self.bot.root_dir, "./templates/discord/base.j2"),
-                encoding="utf-8",
-            ).read()
-        )
-        body = base_template.render({"email": user.email, "password": password})
-
         team_template = Template(
             open(
                 os.path.join(
@@ -165,8 +157,19 @@ class UserCog(commands.Cog):
             ).read()
         )
         team_message = team_template.render()
-        if team_message:
-            body = f"{body}\n\n{team_message}"
+        base_template = Template(
+            open(
+                os.path.join(self.bot.root_dir, "./templates/discord/base.j2"),
+                encoding="utf-8",
+            ).read()
+        )
+        body = base_template.render(
+            {
+                "email": user.email,
+                "password": password,
+                "team_message": team_message,
+            }
+        )
 
         # Do not send passwords via Discord DM (often disabled). Email the user instead.
         if not user.backup_email:
@@ -186,7 +189,7 @@ class UserCog(commands.Cog):
                 self.bot.mailer_sdk(),
                 from_addr=self.bot.config["google"]["subject"],
                 to_addr=user.backup_email,
-                subject="Bienvenue a Lyon e-Sport - Acces Google Workspace",
+                subject="Lyon Esport - Bienvenue dans l'asso !",
                 body=body,
             )
         except HttpError as e:

@@ -1,47 +1,96 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="fr">
 <head>
-<style>
-  body { font-family: sans-serif; line-height: 1.6; color: #333; }
-  .branding { color: #d9534f; font-weight: bold; }
-  .credentials { background-color: #f9f9f9; padding: 15px; border-left: 5px solid #d9534f; margin: 20px 0; }
-  .alert { font-weight: bold; color: #d9534f; font-size: 1.2em; text-align: center; border: 2px solid #d9534f; padding: 15px; margin: 20px 0; background-color: #fff5f5; border-radius: 5px; }
-  .footer { margin-top: 20px; font-size: 0.9em; color: #777; border-top: 1px solid #eee; padding-top: 10px; }
-  a { color: #0056b3; text-decoration: none; }
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bienvenue Lyon e-Sport</title>
 </head>
-<body>
-  <h2>Bonjour à toi !</h2>
-  
-  <p>Voici les informations pour te connecter à ton compte <span class="branding">Lyon e-Sport</span> :</p>
-  
-  <div class="credentials">
-    <p><strong>Lien de connexion :</strong> <a href="https://accounts.google.com/ServiceLogin">https://accounts.google.com/ServiceLogin</a></p>
-    <p><strong>Email :</strong> {{ email }}</p>
-    <p><strong>Mot de passe :</strong> {{ password|safe }}</p>
-  </div>
-  
-  <p><em>Tu seras invité à changer ton mot de passe lors de la première connexion.</em></p>
+<body style="margin:0;padding:0;background:#f3f5f7;font-family:Arial,Helvetica,sans-serif;color:#1f2937;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f3f5f7;padding:24px 12px;">
+    <tr>
+      <td align="center">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:640px;background:#ffffff;border:1px solid #e5e7eb;border-radius:12px;">
+          <tr>
+            <td style="padding:28px 28px 8px 28px;">
+              <p style="margin:0 0 8px 0;font-size:15px;line-height:24px;">
+                Bonjour à toi !
+              </p>
+              <p style="margin:0 0 16px 0;font-size:15px;line-height:24px;">
+                Voici les informations pour te connecter à ton compte Lyon e-Sport :
+              </p>
+            </td>
+          </tr>
 
-  <div class="alert">
-    ⚠️ IMPORTANT : Tu dois IMPÉRATIVEMENT activer la double authentification (2FA) sur ton compte Google dès ta première connexion ! ⚠️
-  </div>
+          <tr>
+            <td style="padding:0 28px 4px 28px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;">
+                <tr>
+                  <td style="padding:16px 18px;">
+                    <p style="margin:0 0 10px 0;font-size:14px;line-height:22px;">
+                      <strong>Lien de connexion :</strong>
+                      <a href="https://accounts.google.com/ServiceLogin" style="color:#1d4ed8;text-decoration:none;">accounts.google.com/ServiceLogin</a>
+                    </p>
+                    <p style="margin:0 0 10px 0;font-size:14px;line-height:22px;"><strong>Email :</strong> {{ email }}</p>
+                    <p style="margin:0;font-size:14px;line-height:22px;"><strong>Mot de passe :</strong> {{ password|safe }}</p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
 
-  <p>Tu as désormais accès aux outils de l'asso via le compte Google Lyon e-Sport :</p>
-  <ul>
-    <li><a href="https://drive.google.com/drive/shared-drives">Google Drive</a> (gestionnaire de fichiers)</li>
-    <li><a href="https://projet.lyon-esport.fr/">Gestion de Projets</a></li>
-    <li><a href="https://wiki.lyon-esport.fr/">Wiki</a> (Documentations)</li>
-  </ul>
+          <tr>
+            <td style="padding:16px 28px 0 28px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#fff7ed;border:1px solid #fed7aa;border-radius:10px;">
+                <tr>
+                  <td style="padding:14px 16px;font-size:14px;line-height:22px;color:#9a3412;">
+                    ⚠️ IMPORTANT : Tu dois IMPÉRATIVEMENT activer la double authentification (2FA) sur ton compte Google dès ta première connexion ! ⚠️
+                    <br>
+                    Active-la ici :
+                    <a href="https://myaccount.google.com/signinoptions/two-step-verification" style="color:#1d4ed8;text-decoration:none;">myaccount.google.com/signinoptions/two-step-verification</a>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
 
-  <p>Avec ces liens tu verras l'essentiel du travail de l'asso. Bien évidemment, tout ce qui concerne la LES sera uniquement ici.</p>
+          <tr>
+            <td style="padding:16px 28px 0 28px;">
+              <p style="margin:0 0 10px 0;font-size:15px;line-height:24px;">Tu as désormais accès aux outils de l'asso via le compte Google Lyon e-Sport :</p>
+              <ul style="margin:0;padding-left:20px;font-size:14px;line-height:24px;">
+                <li><a href="https://drive.google.com/drive/shared-drives" style="color:#1d4ed8;text-decoration:none;">Google Drive</a> (gestionnaire de fichiers)</li>
+                <li><a href="https://projet.lyon-esport.fr/" style="color:#1d4ed8;text-decoration:none;">Gestion de projets</a></li>
+                <li><a href="https://wiki.lyon-esport.fr/" style="color:#1d4ed8;text-decoration:none;">Wiki</a> (documentation)</li>
+              </ul>
+            </td>
+          </tr>
 
-  <p>Le compte Google LES te permettra d'utiliser l'ensemble des services liés à Google Workspace !</p>
-  
-  <p>Si tu as des questions, n'hésite surtout pas à revenir vers les différents chan de la <strong>#Technique</strong> sur Discord ! On se fera un plaisir de te répondre.</p>
+          {% if team_message %}
+          <tr>
+            <td style="padding:16px 28px 0 28px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f0f9ff;border:1px solid #bae6fd;border-radius:10px;">
+                <tr>
+                  <td style="padding:14px 16px;font-size:14px;line-height:22px;color:#0f172a;">
+                    {{ team_message|safe }}
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          {% endif %}
 
-  <div class="footer">
-    <p>Bienvenue à la Lyon e-Sport ! 😉😁</p>
-  </div>
+          <tr>
+            <td style="padding:20px 28px 28px 28px;">
+              <p style="margin:0 0 8px 0;font-size:14px;line-height:22px;">
+                Si tu as des questions, n'hésite pas à poser tes questions sur Discord dans les salons « Technique », puis « google-workspace » : on se fera un plaisir de t'aider !
+              </p>
+              <p style="margin:0;font-size:14px;line-height:22px;color:#1f2937;">
+                Bienvenue à Lyon e-Sport !
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
 </body>
 </html>
