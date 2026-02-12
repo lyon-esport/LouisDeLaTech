@@ -44,7 +44,7 @@ Issues = "https://github.com/lyon-esport/LouisDeLaTech/issues"
 
 [project.optional-dependencies]
 dev = [
-    "ruff~=0.13.2"
+    "ruff>=0.13.2,<0.15.0"
 ]
 
 [build-system]
